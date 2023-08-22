@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { List, ListItemButton, ListItemIcon, ListItemText, styled } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+import BusinessIcon from "@mui/icons-material/Business";
 
 const StyledNavLink = styled(NavLink)(
   ({ theme }) => `
@@ -33,7 +35,7 @@ export const Sidebar = () => {
       <StyledNavLink to="/etf" className={({ isActive }) => (isActive ? "active" : "")}>
         <ListItemButton>
           <ListItemIcon>
-            <HomeIcon />
+            <LocalAtmIcon />
           </ListItemIcon>
           <ListItemText primary="ETF" />
         </ListItemButton>
@@ -41,7 +43,7 @@ export const Sidebar = () => {
       <StyledNavLink to="/stocks" className={({ isActive }) => (isActive ? "active" : "")}>
         <ListItemButton>
           <ListItemIcon>
-            <HomeIcon />
+            <BusinessIcon />
           </ListItemIcon>
           <ListItemText primary="Stock" />
         </ListItemButton>
