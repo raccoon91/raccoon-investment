@@ -1,11 +1,29 @@
-import { FC, memo } from "react";
-import { Box, Card, CardContent, Chip, Typography } from "@mui/material";
+import { FC, MouseEventHandler, memo, useMemo } from "react";
+import { Box, Card, Chip, Typography } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
+import { useFavoriteStore } from "../stores";
 
 interface ISymbolListProps {
   symbolList: ISymbolData[] | null;
+  onClickFavorite?: MouseEventHandler<SVGSVGElement>;
 }
 
-export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList }) => {
+export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, onClickFavorite }) => {
+  const favorites = useFavoriteStore(state => state.favorites);
+
+  const favoriteMap = useMemo(
+    () =>
+      favorites.reduce(
+        (acc, cur) => {
+          acc[cur.symbol] = true;
+
+          return acc;
+        },
+        {} as Record<string, boolean>
+      ),
+    [favorites]
+  );
+
   return (
     <Box
       sx={{
@@ -17,21 +35,31 @@ export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList }) => {
         flex: 1,
       }}
     >
-      {symbolList?.map(stock => (
-        <Card key={stock.symbol}>
-          <CardContent>
-            <Box sx={{ display: "flex", gap: "60px" }}>
-              <Chip label={stock.symbol} />
+      {symbolList?.map(symbolData => (
+        <Card key={symbolData.symbol} sx={{ display: "flex", flexDirection: "column", gap: "24px", padding: "16px" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "60px" }}>
+            <Chip label={symbolData.symbol} />
 
-              <Box sx={{ display: "flex", gap: "8px" }}>
-                <Chip variant="outlined" label={stock.exchange} />
-                <Chip variant="outlined" label={stock.mic_code} />
-                <Chip variant="outlined" label={stock.currency} />
-              </Box>
+            <Box sx={{ display: "flex", gap: "8px" }}>
+              <Chip variant="outlined" label={symbolData.exchange} />
+              <Chip variant="outlined" label={symbolData.mic_code} />
+              <Chip variant="outlined" label={symbolData.currency} />
             </Box>
 
-            <Typography sx={{ marginTop: "24px", padding: "0 4px" }}>{stock.name}</Typography>
-          </CardContent>
+            {onClickFavorite && (
+              <StarIcon
+                sx={{
+                  marginLeft: "auto",
+                  cursor: "pointer",
+                  color: favoriteMap[symbolData.symbol] ? "yellow" : "gray",
+                }}
+                data-symbol={symbolData.symbol}
+                onClick={onClickFavorite}
+              />
+            )}
+          </Box>
+
+          <Typography sx={{ padding: "0 4px" }}>{symbolData.name}</Typography>
         </Card>
       ))}
     </Box>

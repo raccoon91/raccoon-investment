@@ -28,7 +28,7 @@ export const useStockStore = create<IStockStore>((set, get) => ({
 
     useGlobalStore.getState().setIsLoad(true);
 
-    const stockList = await db.stocks.filter(stock => new RegExp(search).test(stock.name)).toArray();
+    const stockList = await db.stocks.filter(stock => new RegExp(search).test(stock.name.toLowerCase())).toArray();
 
     set({ stockList });
 

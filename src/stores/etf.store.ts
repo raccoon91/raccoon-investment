@@ -28,7 +28,7 @@ export const useETFStore = create<IETFStore>((set, get) => ({
 
     useGlobalStore.getState().setIsLoad(true);
 
-    const etfList = await db.etfs.filter(etf => new RegExp(search).test(etf.name)).toArray();
+    const etfList = await db.etfs.filter(etf => new RegExp(search).test(etf.name.toLowerCase())).toArray();
 
     set({ etfList });
 

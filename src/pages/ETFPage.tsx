@@ -1,11 +1,12 @@
-import { ChangeEvent, KeyboardEventHandler } from "react";
+import { ChangeEvent, KeyboardEventHandler, MouseEventHandler } from "react";
 import { Box, Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import CloudSyncIcon from "@mui/icons-material/CloudSync";
 import { SymbolList } from "../components";
-import { useETFStore } from "../stores";
+import { useETFStore, useFavoriteStore } from "../stores";
 
 export const ETFPage = () => {
+  const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);
   const { search, etfList, changeSearch, getETFData, syncETFData } = useETFStore(state => ({
     search: state.search,
     etfList: state.etfList,
@@ -22,6 +23,15 @@ export const ETFPage = () => {
     if (e.key !== "Enter") return;
 
     await getETFData();
+  };
+
+  const handleClickFavorite: MouseEventHandler<SVGSVGElement> = async e => {
+    const symbol = e.currentTarget.dataset["symbol"];
+    const symbolData = etfList?.find(etf => etf.symbol === symbol);
+
+    if (!symbolData) return;
+
+    await toggleFavorite(symbolData);
   };
 
   return (
@@ -48,7 +58,7 @@ export const ETFPage = () => {
         </Button>
       </Box>
 
-      <SymbolList symbolList={etfList} />
+      <SymbolList symbolList={etfList} onClickFavorite={handleClickFavorite} />
     </Box>
   );
 };

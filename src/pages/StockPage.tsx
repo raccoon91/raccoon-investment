@@ -1,11 +1,12 @@
-import { ChangeEvent, KeyboardEventHandler } from "react";
+import { ChangeEvent, KeyboardEventHandler, MouseEventHandler } from "react";
 import { Box, Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import CloudSyncIcon from "@mui/icons-material/CloudSync";
 import { SymbolList } from "../components";
-import { useStockStore } from "../stores";
+import { useFavoriteStore, useStockStore } from "../stores";
 
 export const StockPage = () => {
+  const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);
   const { search, stockList, changeSearch, getStockData, syncStockData } = useStockStore(state => ({
     search: state.search,
     stockList: state.stockList,
@@ -22,6 +23,15 @@ export const StockPage = () => {
     if (e.key !== "Enter") return;
 
     await getStockData();
+  };
+
+  const handleClickFavorite: MouseEventHandler<SVGSVGElement> = async e => {
+    const symbol = e.currentTarget.dataset["symbol"];
+    const symbolData = stockList?.find(stock => stock.symbol === symbol);
+
+    if (!symbolData) return;
+
+    await toggleFavorite(symbolData);
   };
 
   return (
@@ -48,7 +58,7 @@ export const StockPage = () => {
         </Button>
       </Box>
 
-      <SymbolList symbolList={stockList} />
+      <SymbolList symbolList={stockList} onClickFavorite={handleClickFavorite} />
     </Box>
   );
 };
