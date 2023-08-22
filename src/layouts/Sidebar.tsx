@@ -27,21 +27,25 @@ export const Sidebar = () => {
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
-          <ListItemText primary="Sent mail" />
+          <ListItemText primary="Home" />
         </ListItemButton>
       </StyledNavLink>
-      <ListItemButton>
-        <ListItemIcon>
-          <HomeIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <HomeIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-      </ListItemButton>
+      <StyledNavLink to="/etf" className={({ isActive }) => (isActive ? "active" : "")}>
+        <ListItemButton>
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="ETF" />
+        </ListItemButton>
+      </StyledNavLink>
+      <StyledNavLink to="/stocks" className={({ isActive }) => (isActive ? "active" : "")}>
+        <ListItemButton>
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="Stock" />
+        </ListItemButton>
+      </StyledNavLink>
     </List>
   );
 };

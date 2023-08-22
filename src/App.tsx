@@ -1,6 +1,6 @@
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { HomePage } from "./pages";
+import { ETFPage, HomePage, StockPage } from "./pages";
 import { Layout } from "./layouts";
 
 const theme = createTheme({
@@ -18,6 +18,8 @@ export const App = () => {
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
+            <Route path="etf" element={<ETFPage />} />
+            <Route path="stocks" element={<StockPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
