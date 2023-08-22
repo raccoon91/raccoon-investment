@@ -6,12 +6,12 @@ import { SymbolList } from "../components";
 import { useETFStore } from "../stores";
 
 export const ETFPage = () => {
-  const { search, etfList, changeSearch, getETFData, pollingETFData } = useETFStore(state => ({
+  const { search, etfList, changeSearch, getETFData, syncETFData } = useETFStore(state => ({
     search: state.search,
     etfList: state.etfList,
     changeSearch: state.changeSearch,
     getETFData: state.getETFData,
-    pollingETFData: state.pollingETFData,
+    syncETFData: state.syncETFData,
   }));
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +43,7 @@ export const ETFPage = () => {
           }}
         />
 
-        <Button variant="contained" onClick={pollingETFData}>
+        <Button variant="contained" onClick={syncETFData}>
           <CloudSyncIcon />
         </Button>
       </Box>

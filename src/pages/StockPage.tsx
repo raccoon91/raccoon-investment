@@ -6,12 +6,12 @@ import { SymbolList } from "../components";
 import { useStockStore } from "../stores";
 
 export const StockPage = () => {
-  const { search, stockList, changeSearch, getStockData, pollingStockData } = useStockStore(state => ({
+  const { search, stockList, changeSearch, getStockData, syncStockData } = useStockStore(state => ({
     search: state.search,
     stockList: state.stockList,
     changeSearch: state.changeSearch,
     getStockData: state.getStockData,
-    pollingStockData: state.pollingStockData,
+    syncStockData: state.syncStockData,
   }));
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +43,7 @@ export const StockPage = () => {
           }}
         />
 
-        <Button variant="contained" onClick={pollingStockData}>
+        <Button variant="contained" onClick={syncStockData}>
           <CloudSyncIcon />
         </Button>
       </Box>

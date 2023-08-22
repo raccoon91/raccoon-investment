@@ -8,7 +8,7 @@ interface IETFStore {
   etfList: IETFData[] | null;
   changeSearch: (value?: string) => void;
   getETFData: () => Promise<void>;
-  pollingETFData: () => Promise<void>;
+  syncETFData: () => Promise<void>;
 }
 
 export const useETFStore = create<IETFStore>((set, get) => ({
@@ -34,16 +34,16 @@ export const useETFStore = create<IETFStore>((set, get) => ({
 
     useGlobalStore.getState().setIsLoad(false);
   },
-  pollingETFData: async () => {
+  syncETFData: async () => {
     useGlobalStore.getState().setIsLoad(true);
 
-    const res = await axios.get<{ data: ISymbolData[] }>(`${import.meta.env.VITE_TWELVE_DATA_API}/etf`, {
-      params: {
-        apikey: import.meta.env.VITE_TWELVE_DATA_API_KEY,
-        country: "United States",
-      },
-    });
-    // const res = await axios.get<{ data: ISymbolData[] }>("/etf.json", {});
+    // const res = await axios.get<{ data: ISymbolData[] }>(`${import.meta.env.VITE_TWELVE_DATA_API}/etf`, {
+    //   params: {
+    //     apikey: import.meta.env.VITE_TWELVE_DATA_API_KEY,
+    //     country: "United States",
+    //   },
+    // });
+    const res = await axios.get<{ data: ISymbolData[] }>("/etf.json", {});
 
     const etfList: IETFData[] = res.data.data.map(etf => ({
       ...etf,

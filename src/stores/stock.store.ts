@@ -8,7 +8,7 @@ interface IStockStore {
   stockList: IStockData[] | null;
   changeSearch: (value?: string) => void;
   getStockData: () => Promise<void>;
-  pollingStockData: () => Promise<void>;
+  syncStockData: () => Promise<void>;
 }
 
 export const useStockStore = create<IStockStore>((set, get) => ({
@@ -34,7 +34,7 @@ export const useStockStore = create<IStockStore>((set, get) => ({
 
     useGlobalStore.getState().setIsLoad(false);
   },
-  pollingStockData: async () => {
+  syncStockData: async () => {
     useGlobalStore.getState().setIsLoad(true);
 
     // const res = await axios.get<{ data: ISymbolData[] }>(`${import.meta.env.VITE_TWELVE_DATA_API}/stocks`, {
