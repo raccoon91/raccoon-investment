@@ -1,4 +1,5 @@
 import { MouseEventHandler, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Box, Card, Chip, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useFavoriteStore } from "../stores";
@@ -32,7 +33,13 @@ export const HomePage = () => {
               <Chip label={favorite.symbol} />
             </Box>
 
-            <Typography>{favorite.name}</Typography>
+            <Typography
+              component={Link}
+              to={`/chart?symbol=${favorite.symbol}&type=${favorite.type}`}
+              sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+            >
+              {favorite.name}
+            </Typography>
 
             <CloseIcon
               sx={{ marginLeft: "auto", cursor: "pointer" }}

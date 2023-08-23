@@ -1,7 +1,7 @@
 import axios from "axios";
 import { create } from "zustand";
+import { useGlobalStore } from "./global.store";
 import { db } from "../db";
-import { useGlobalStore } from ".";
 
 interface IStockStore {
   search: string;
@@ -30,9 +30,9 @@ export const useStockStore = create<IStockStore>((set, get) => ({
 
     const stockList = await db.stocks.filter(stock => new RegExp(search).test(stock.name.toLowerCase())).toArray();
 
-    set({ stockList });
-
     useGlobalStore.getState().setIsLoad(false);
+
+    set({ stockList });
   },
   syncStockData: async () => {
     useGlobalStore.getState().setIsLoad(true);
@@ -50,8 +50,8 @@ export const useStockStore = create<IStockStore>((set, get) => ({
       type: "Stock",
     }));
 
-    await db.stocks.bulkPut(stockList);
-
     useGlobalStore.getState().setIsLoad(false);
+
+    await db.stocks.bulkPut(stockList);
   },
 }));

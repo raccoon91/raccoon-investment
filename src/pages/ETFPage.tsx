@@ -2,8 +2,8 @@ import { ChangeEvent, KeyboardEventHandler, MouseEventHandler } from "react";
 import { Box, Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import CloudSyncIcon from "@mui/icons-material/CloudSync";
-import { SymbolList } from "../components";
 import { useETFStore, useFavoriteStore } from "../stores";
+import { SymbolList } from "../components";
 
 export const ETFPage = () => {
   const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);

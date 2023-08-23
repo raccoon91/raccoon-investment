@@ -1,7 +1,7 @@
 import axios from "axios";
 import { create } from "zustand";
+import { useGlobalStore } from "./global.store";
 import { db } from "../db";
-import { useGlobalStore } from ".";
 
 interface IETFStore {
   search: string;
@@ -30,9 +30,9 @@ export const useETFStore = create<IETFStore>((set, get) => ({
 
     const etfList = await db.etfs.filter(etf => new RegExp(search).test(etf.name.toLowerCase())).toArray();
 
-    set({ etfList });
-
     useGlobalStore.getState().setIsLoad(false);
+
+    set({ etfList });
   },
   syncETFData: async () => {
     useGlobalStore.getState().setIsLoad(true);
@@ -50,8 +50,8 @@ export const useETFStore = create<IETFStore>((set, get) => ({
       type: "ETF",
     }));
 
-    await db.etfs.bulkPut(etfList);
-
     useGlobalStore.getState().setIsLoad(false);
+
+    await db.etfs.bulkPut(etfList);
   },
 }));

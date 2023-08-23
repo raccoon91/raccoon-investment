@@ -4,6 +4,7 @@ export class Dexie extends DexieBase {
   etfs!: Table<IETFData>;
   stocks!: Table<IStockData>;
   favorites!: Table<ISymbolData>;
+  charts!: Table<ICandleChartData>;
 
   constructor() {
     super("raccoon-investment");
@@ -12,6 +13,7 @@ export class Dexie extends DexieBase {
       etfs: "symbol",
       stocks: "symbol",
       favorites: "symbol",
+      charts: "[symbol+time]",
     });
   }
 }

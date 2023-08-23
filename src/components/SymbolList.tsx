@@ -2,6 +2,7 @@ import { FC, MouseEventHandler, memo, useMemo } from "react";
 import { Box, Card, Chip, Typography } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import { useFavoriteStore } from "../stores";
+import { Link } from "react-router-dom";
 
 interface ISymbolListProps {
   symbolList: ISymbolData[] | null;
@@ -59,7 +60,13 @@ export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, onClickFavor
             )}
           </Box>
 
-          <Typography sx={{ padding: "0 4px" }}>{symbolData.name}</Typography>
+          <Typography
+            component={Link}
+            to={`/chart?symbol=${symbolData.symbol}&type=${symbolData.type}`}
+            sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+          >
+            {symbolData.name}
+          </Typography>
         </Card>
       ))}
     </Box>

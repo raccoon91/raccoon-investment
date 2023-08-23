@@ -11,3 +11,36 @@ type ISymbolData = {
 type IETFData = { type: "ETF" } & ISymbolData;
 
 type IStockData = { type: "Stock" } & ISymbolData;
+
+type IChartMetaData = {
+  symbol: string;
+  interval: string;
+  currency: string;
+  exchange_timezone: string;
+  exchange: string;
+  mic_code: string;
+  type: string;
+};
+
+type IChartValueData = {
+  datetime: string;
+  open: string;
+  high: string;
+  low: string;
+  close: string;
+  volume: string;
+};
+
+type IChartData = {
+  meta: IChartMetaData;
+  values: IChartValueData[];
+};
+
+type ICandleChartData = {
+  symbol: string;
+  time: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+};

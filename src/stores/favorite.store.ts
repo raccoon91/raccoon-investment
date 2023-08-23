@@ -1,6 +1,6 @@
 import { create } from "zustand";
+import { useGlobalStore } from "./global.store";
 import { db } from "../db";
-import { useGlobalStore } from ".";
 
 interface IFavoriteStore {
   favorites: ISymbolData[];
@@ -16,9 +16,9 @@ export const useFavoriteStore = create<IFavoriteStore>(set => ({
 
     const favorites = await db.favorites.toArray();
 
-    set({ favorites });
-
     useGlobalStore.getState().setIsLoad(false);
+
+    set({ favorites });
   },
   deleteFavorite: async (symbolData?: ISymbolData) => {
     if (!symbolData) return;
