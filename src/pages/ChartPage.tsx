@@ -36,7 +36,14 @@ export const ChartPage = () => {
 
   return (
     <Box
-      sx={{ overflow: "auto", display: "flex", flexDirection: "column", gap: "24px", width: "100%", height: "100%" }}
+      sx={{
+        overflow: "auto",
+        display: "flex",
+        flexDirection: "column",
+        gap: "24px",
+        width: "100%",
+        height: "100%",
+      }}
     >
       <Box sx={{ display: "flex", alignItems: "center" }}>
         {symbolData && (

@@ -12,36 +12,48 @@ interface IFavoriteStore {
 export const useFavoriteStore = create<IFavoriteStore>(set => ({
   favorites: [],
   getFavorites: async () => {
-    useGlobalStore.getState().setIsLoad(true);
+    try {
+      useGlobalStore.getState().setIsLoad(true);
 
-    const favorites = await db.favorites.toArray();
+      const favorites = await db.favorites.toArray();
 
-    useGlobalStore.getState().setIsLoad(false);
+      useGlobalStore.getState().setIsLoad(false);
 
-    set({ favorites });
+      set({ favorites });
+    } catch (err) {
+      console.error(err);
+    }
   },
   deleteFavorite: async (symbolData?: ISymbolData) => {
-    if (!symbolData) return;
+    try {
+      if (!symbolData) return;
 
-    await db.favorites.delete(symbolData.symbol);
+      await db.favorites.delete(symbolData.symbol);
 
-    const favorites = await db.favorites.toArray();
+      const favorites = await db.favorites.toArray();
 
-    set({ favorites });
+      set({ favorites });
+    } catch (err) {
+      console.error(err);
+    }
   },
   toggleFavorite: async (symbolData?: ISymbolData) => {
-    if (!symbolData) return;
+    try {
+      if (!symbolData) return;
 
-    const isExist = await db.favorites.get(symbolData.symbol);
+      const isExist = await db.favorites.get(symbolData.symbol);
 
-    if (isExist) {
-      await db.favorites.delete(symbolData.symbol);
-    } else {
-      await db.favorites.add(symbolData);
+      if (isExist) {
+        await db.favorites.delete(symbolData.symbol);
+      } else {
+        await db.favorites.add(symbolData);
+      }
+
+      const favorites = await db.favorites.toArray();
+
+      set({ favorites });
+    } catch (err) {
+      console.error(err);
     }
-
-    const favorites = await db.favorites.toArray();
-
-    set({ favorites });
   },
 }));

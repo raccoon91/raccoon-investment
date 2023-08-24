@@ -18,40 +18,47 @@ export const useStockStore = create<IStockStore>((set, get) => ({
     set({ search: value });
   },
   getStockData: async () => {
-    const search = get().search;
+    try {
+      const search = get().search;
 
-    if (!search) {
-      set({ stockList: null });
+      if (!search) {
+        set({ stockList: null });
 
-      return;
+        return;
+      }
+
+      useGlobalStore.getState().setIsLoad(true);
+
+      const stockList = await db.stocks.filter(stock => new RegExp(search).test(stock.name.toLowerCase())).toArray();
+
+      useGlobalStore.getState().setIsLoad(false);
+
+      set({ stockList });
+    } catch (err) {
+      console.error(err);
     }
-
-    useGlobalStore.getState().setIsLoad(true);
-
-    const stockList = await db.stocks.filter(stock => new RegExp(search).test(stock.name.toLowerCase())).toArray();
-
-    useGlobalStore.getState().setIsLoad(false);
-
-    set({ stockList });
   },
   syncStockData: async () => {
-    useGlobalStore.getState().setIsLoad(true);
+    try {
+      useGlobalStore.getState().setIsLoad(true);
 
-    // const res = await axios.get<{ data: ISymbolData[] }>(`${import.meta.env.VITE_TWELVE_DATA_API}/stocks`, {
-    //   params: {
-    //     apikey: import.meta.env.VITE_TWELVE_DATA_API_KEY,
-    //     country: "United States",
-    //   },
-    // });
-    const res = await axios.get<{ data: ISymbolData[] }>("/stocks.json", {});
+      const res = await axios.get<{ data: ISymbolData[] }>(`${import.meta.env.VITE_TWELVE_DATA_API}/stocks`, {
+        params: {
+          apikey: import.meta.env.VITE_TWELVE_DATA_API_KEY,
+          country: "United States",
+        },
+      });
 
-    const stockList: IStockData[] = res.data.data.map(stock => ({
-      ...stock,
-      type: "Stock",
-    }));
+      const stockList: IStockData[] = res.data.data.map(stock => ({
+        ...stock,
+        type: "Stock",
+      }));
 
-    useGlobalStore.getState().setIsLoad(false);
+      useGlobalStore.getState().setIsLoad(false);
 
-    await db.stocks.bulkPut(stockList);
+      await db.stocks.bulkPut(stockList);
+    } catch (err) {
+      console.error(err);
+    }
   },
 }));
