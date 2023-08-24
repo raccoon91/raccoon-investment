@@ -1,6 +1,6 @@
 import axios from "axios";
 import { create } from "zustand";
-import { uniqBy } from "lodash-es";
+import { sortBy, uniqBy } from "lodash-es";
 import { useGlobalStore } from "./global.store";
 import { db } from "../db";
 
@@ -31,12 +31,13 @@ export const useChartStore = create<IChartStore>(set => ({
       }
 
       const chartValues = await db.charts.where({ symbol }).toArray();
+      const sortedChartValues = sortBy(chartValues, "time");
 
-      useGlobalStore.getState().setIsLoad(false);
-
-      set({ symbolData, chartValues });
+      set({ symbolData, chartValues: sortedChartValues });
     } catch (err) {
       console.error(err);
+    } finally {
+      useGlobalStore.getState().setIsLoad(false);
     }
   },
   syncChartData: async (symbol?: string, type?: string, interval = "1week") => {
@@ -59,22 +60,20 @@ export const useChartStore = create<IChartStore>(set => ({
         }
       );
 
-      const chartData = uniqBy(res?.data?.values ?? [], data => data.datetime)
-        .reverse()
-        .map(data => ({
-          symbol,
-          time: data.datetime,
-          open: Number(data.open),
-          high: Number(data.high),
-          low: Number(data.low),
-          close: Number(data.close),
-        }));
+      const chartData = uniqBy(res?.data?.values ?? [], data => data.datetime).map(data => ({
+        symbol,
+        time: data.datetime,
+        open: Number(data.open),
+        high: Number(data.high),
+        low: Number(data.low),
+        close: Number(data.close),
+      }));
 
       await db.charts.bulkAdd(chartData);
-
-      useGlobalStore.getState().setIsLoad(false);
     } catch (err) {
       console.error(err);
+    } finally {
+      useGlobalStore.getState().setIsLoad(false);
     }
   },
 }));

@@ -1,8 +1,8 @@
 import { FC, MouseEventHandler, memo, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { Box, Card, Chip, Typography } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import { useFavoriteStore } from "../stores";
-import { Link } from "react-router-dom";
 
 interface ISymbolListProps {
   symbolList: ISymbolData[] | null;

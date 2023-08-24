@@ -17,11 +17,11 @@ export const useFavoriteStore = create<IFavoriteStore>(set => ({
 
       const favorites = await db.favorites.toArray();
 
-      useGlobalStore.getState().setIsLoad(false);
-
       set({ favorites });
     } catch (err) {
       console.error(err);
+    } finally {
+      useGlobalStore.getState().setIsLoad(false);
     }
   },
   deleteFavorite: async (symbolData?: ISymbolData) => {

@@ -1,9 +1,9 @@
+import { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Box, Button, Chip, Typography } from "@mui/material";
 import CloudSyncIcon from "@mui/icons-material/CloudSync";
 import { useChartStore } from "../stores";
 import { Chart } from "../components";
-import { useEffect, useMemo } from "react";
 
 export const ChartPage = () => {
   const [params] = useSearchParams();
@@ -31,7 +31,8 @@ export const ChartPage = () => {
 
     if (!symbol || !type) return;
 
-    syncChartData(symbol, type);
+    await syncChartData(symbol, type);
+    await getChartData(symbol, type);
   };
 
   return (

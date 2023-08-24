@@ -31,11 +31,11 @@ export const useStockStore = create<IStockStore>((set, get) => ({
 
       const stockList = await db.stocks.filter(stock => new RegExp(search).test(stock.name.toLowerCase())).toArray();
 
-      useGlobalStore.getState().setIsLoad(false);
-
       set({ stockList });
     } catch (err) {
       console.error(err);
+    } finally {
+      useGlobalStore.getState().setIsLoad(false);
     }
   },
   syncStockData: async () => {
@@ -54,11 +54,11 @@ export const useStockStore = create<IStockStore>((set, get) => ({
         type: "Stock",
       }));
 
-      useGlobalStore.getState().setIsLoad(false);
-
       await db.stocks.bulkPut(stockList);
     } catch (err) {
       console.error(err);
+    } finally {
+      useGlobalStore.getState().setIsLoad(false);
     }
   },
 }));
