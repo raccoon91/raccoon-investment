@@ -69,7 +69,7 @@ export const useChartStore = create<IChartStore>(set => ({
         close: Number(data.close),
       }));
 
-      await db.charts.bulkAdd(chartData);
+      await db.charts.bulkPut(chartData);
     } catch (err) {
       console.error(err);
     } finally {

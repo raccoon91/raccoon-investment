@@ -5,6 +5,7 @@ export class Dexie extends DexieBase {
   stocks!: Table<IStockData>;
   favorites!: Table<ISymbolData>;
   charts!: Table<ICandleChartData>;
+  markers!: Table<IMarkerData>;
 
   constructor() {
     super("raccoon-investment");
@@ -14,6 +15,7 @@ export class Dexie extends DexieBase {
       stocks: "symbol",
       favorites: "symbol",
       charts: "[symbol+time]",
+      markers: "[symbol+time]",
     });
   }
 }

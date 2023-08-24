@@ -44,3 +44,12 @@ type ICandleChartData = {
   low: number;
   close: number;
 };
+
+type IMarkerData = {
+  symbol: string;
+  time: string;
+  position: "aboveBar" | "belowBar" | "inBar";
+  color: string;
+  shape: "circle" | "arrowDown" | "square" | "arrowUp";
+  text: "dividen";
+};

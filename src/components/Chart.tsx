@@ -1,19 +1,24 @@
 import { FC, useEffect, useRef } from "react";
 import { Box } from "@mui/material";
-import { IChartApi, createChart } from "lightweight-charts";
+import { IChartApi, MouseEventParams, createChart } from "lightweight-charts";
 import { useGlobalStore } from "../stores";
 
 interface IChartProps {
   chartValues?: ICandleChartData[] | null;
+  markers?: IMarkerData[];
 }
 
-export const Chart: FC<IChartProps> = ({ chartValues }) => {
+export const Chart: FC<IChartProps> = ({ chartValues, markers }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<IChartApi | null>(null);
   const theme = useGlobalStore(state => state.theme);
 
   useEffect(() => {
-    if (!chartRef.current || !chartValues) return;
+    if (!chartRef.current || !chartValues || !markers) return;
+
+    const handleChartClick = (event: MouseEventParams) => {
+      console.log(event);
+    };
 
     chartInstance.current = createChart(chartRef.current, {
       layout: {
@@ -35,13 +40,16 @@ export const Chart: FC<IChartProps> = ({ chartValues }) => {
     });
 
     candlestickSeries.setData(chartValues);
+    candlestickSeries.setMarkers(markers);
 
     chartInstance.current.timeScale().fitContent();
+    chartInstance.current.subscribeClick(handleChartClick);
 
     return () => {
+      chartInstance.current?.unsubscribeClick(handleChartClick);
       chartInstance.current?.remove();
     };
-  }, [chartRef, chartInstance, theme, chartValues]);
+  }, [chartRef, chartInstance, theme, chartValues, markers]);
 
   return <Box ref={chartRef} sx={{ width: "100%", height: "100%" }} />;
 };
