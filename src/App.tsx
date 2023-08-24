@@ -1,15 +1,12 @@
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ChartPage, ETFPage, HomePage, StockPage } from "./pages";
 import { Layout } from "./layouts";
-
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
+import { useGlobalStore } from "./stores";
 
 export const App = () => {
+  const theme = useGlobalStore(state => state.theme);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

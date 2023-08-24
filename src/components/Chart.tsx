@@ -1,6 +1,7 @@
 import { FC, useEffect, useRef } from "react";
 import { Box } from "@mui/material";
 import { IChartApi, createChart } from "lightweight-charts";
+import { useGlobalStore } from "../stores";
 
 interface IChartProps {
   chartValues?: ICandleChartData[] | null;
@@ -9,27 +10,28 @@ interface IChartProps {
 export const Chart: FC<IChartProps> = ({ chartValues }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<IChartApi | null>(null);
+  const theme = useGlobalStore(state => state.theme);
 
   useEffect(() => {
     if (!chartRef.current || !chartValues) return;
 
     chartInstance.current = createChart(chartRef.current, {
       layout: {
-        background: { color: "#121212" },
-        textColor: "#DDD",
+        background: { color: theme.palette.background.default },
+        textColor: theme.palette.text.primary,
       },
       grid: {
-        vertLines: { color: "#222" },
-        horzLines: { color: "#222" },
+        vertLines: { color: theme.palette.divider },
+        horzLines: { color: theme.palette.divider },
       },
     });
 
     const candlestickSeries = chartInstance.current.addCandlestickSeries({
-      upColor: "#f44336",
-      downColor: "#2196f3",
+      upColor: theme.palette.error.main,
+      downColor: theme.palette.info.main,
       borderVisible: false,
-      wickUpColor: "#f44336",
-      wickDownColor: "#2196f3",
+      wickUpColor: theme.palette.error.main,
+      wickDownColor: theme.palette.info.main,
     });
 
     candlestickSeries.setData(chartValues);
@@ -39,7 +41,7 @@ export const Chart: FC<IChartProps> = ({ chartValues }) => {
     return () => {
       chartInstance.current?.remove();
     };
-  }, [chartRef, chartInstance, chartValues]);
+  }, [chartRef, chartInstance, theme, chartValues]);
 
   return <Box ref={chartRef} sx={{ width: "100%", height: "100%" }} />;
 };
