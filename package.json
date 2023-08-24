@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.5",
     "axios": "^1.4.0",
+    "dayjs": "^1.11.9",
     "dexie": "^3.2.4",
     "lightweight-charts": "^4.0.1",
     "lodash-es": "^4.17.21",
