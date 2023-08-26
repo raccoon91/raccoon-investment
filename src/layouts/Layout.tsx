@@ -18,11 +18,12 @@ export const Layout = () => {
     <Box sx={{ overflow: "hidden", display: "flex", width: "100vw", height: "100vh" }}>
       <Box
         sx={{
-          flex: "0 0 240px",
-          width: "240px",
+          flex: "0 0 60px",
+          width: "60px",
           borderRight: "1px solid",
           borderColor: "divider",
           padding: "48px 0",
+          boxSizing: "content-box",
         }}
       >
         <Sidebar />
