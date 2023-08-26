@@ -2,17 +2,17 @@ import { ChangeEvent, KeyboardEventHandler, MouseEventHandler } from "react";
 import { Box, Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import CloudSyncIcon from "@mui/icons-material/CloudSync";
-import { useETFStore, useFavoriteStore } from "../stores";
+import { useFavoriteStore, useSymbolStore } from "../stores";
 import { SymbolList } from "../components";
 
-export const ETFPage = () => {
+export const SymbolPage = () => {
   const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);
-  const { search, etfList, changeSearch, getETFData, syncETFData } = useETFStore(state => ({
+  const { search, symbolList, changeSearch, getSymbolData, syncSymbolData } = useSymbolStore(state => ({
     search: state.search,
-    etfList: state.etfList,
+    symbolList: state.symbolList,
     changeSearch: state.changeSearch,
-    getETFData: state.getETFData,
-    syncETFData: state.syncETFData,
+    getSymbolData: state.getSymbolData,
+    syncSymbolData: state.syncSymbolData,
   }));
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -22,16 +22,16 @@ export const ETFPage = () => {
   const handleEnter: KeyboardEventHandler<HTMLInputElement> = async e => {
     if (e.key !== "Enter") return;
 
-    await getETFData();
+    await getSymbolData();
   };
 
   const handleClickFavorite: MouseEventHandler<SVGSVGElement> = async e => {
-    const symbol = e.currentTarget.dataset["symbol"];
-    const symbolData = etfList?.find(etf => etf.symbol === symbol);
+    const symbolId = e.currentTarget.dataset["symbolId"];
+    const symbol = symbolList?.find(symbol => `${symbol.id}` === symbolId);
 
-    if (!symbolData) return;
+    if (!symbol) return;
 
-    await toggleFavorite(symbolData);
+    await toggleFavorite(symbol);
   };
 
   return (
@@ -53,12 +53,12 @@ export const ETFPage = () => {
           }}
         />
 
-        <Button variant="contained" onClick={syncETFData}>
+        <Button variant="contained" onClick={syncSymbolData}>
           <CloudSyncIcon />
         </Button>
       </Box>
 
-      <SymbolList symbolList={etfList} onClickFavorite={handleClickFavorite} />
+      <SymbolList symbolList={symbolList} onClickFavorite={handleClickFavorite} />
     </Box>
   );
 };

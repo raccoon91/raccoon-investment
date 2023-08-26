@@ -1,27 +1,27 @@
-import { create } from "zustand";
-import { db } from "../db";
 import dayjs from "dayjs";
 import { sortBy } from "lodash-es";
+import { create } from "zustand";
+import { db } from "../db";
 
 interface IMarkerStore {
   markers: IMarkerData[];
   markerJson: string;
-  addMarker: (symbol?: string | null) => void;
+  addMarker: (symbolId?: string) => void;
   changeMarker: (value?: string) => void;
-  getMarkerData: (symbol?: string | null) => Promise<void>;
-  saveMarkerData: (symbol?: string | null) => Promise<void>;
+  getMarkerData: (symbolId?: string) => Promise<void>;
+  saveMarkerData: () => Promise<void>;
 }
 
 export const useMarkerStore = create<IMarkerStore>((set, get) => ({
   markers: [],
   markerJson: "",
-  addMarker: (symbol?: string | null) => {
-    if (!symbol) return;
+  addMarker: (symbolId?: string) => {
+    if (!symbolId) return;
 
     const markers = get().markers;
 
     markers.unshift({
-      symbol,
+      id: Number(symbolId),
       time: dayjs().format("YYYY-MM-DD"),
       position: "aboveBar",
       color: "#388E3C",
@@ -40,11 +40,11 @@ export const useMarkerStore = create<IMarkerStore>((set, get) => ({
       console.error(err);
     }
   },
-  getMarkerData: async (symbol?: string | null) => {
+  getMarkerData: async (symbolId?: string) => {
     try {
-      if (!symbol) return;
+      if (!symbolId) return;
 
-      const markerData = await db.markers.where({ symbol }).toArray();
+      const markerData = await db.markers.where({ id: Number(symbolId) }).toArray();
       const sortedMarkerData = sortBy(markerData, "time");
 
       set({ markers: sortedMarkerData, markerJson: JSON.stringify(sortedMarkerData, null, 4) });
@@ -52,10 +52,8 @@ export const useMarkerStore = create<IMarkerStore>((set, get) => ({
       console.error(err);
     }
   },
-  saveMarkerData: async (symbol?: string | null) => {
+  saveMarkerData: async () => {
     try {
-      if (!symbol) return;
-
       const markerJson = get().markerJson;
       const markers = JSON.parse(markerJson);
 

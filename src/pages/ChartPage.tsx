@@ -1,5 +1,5 @@
 import { ChangeEventHandler, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Box, Button, Chip, Drawer, Typography, styled } from "@mui/material";
 import CloudSyncIcon from "@mui/icons-material/CloudSync";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -23,9 +23,9 @@ const Textarea = styled("textarea")(
 );
 
 export const ChartPage = () => {
-  const [params] = useSearchParams();
-  const { symbolData, chartValues, getChartData, syncChartData } = useChartStore(state => ({
-    symbolData: state.symbolData,
+  const params = useParams();
+  const { symbol, chartValues, getChartData, syncChartData } = useChartStore(state => ({
+    symbol: state.symbol,
     chartValues: state.chartValues,
     getChartData: state.getChartData,
     syncChartData: state.syncChartData,
@@ -43,23 +43,17 @@ export const ChartPage = () => {
   const isEmpty = useMemo(() => !!chartValues && chartValues.length === 0, [chartValues]);
 
   useEffect(() => {
-    const symbol = params?.get("symbol");
-    const type = params?.get("type");
+    if (!params?.symbolId) return;
 
-    if (!symbol || !type) return;
-
-    getChartData(symbol, type);
-    getMarkerData(symbol);
+    getChartData(params?.symbolId);
+    getMarkerData(params?.symbolId);
   }, [params]);
 
   const handleClickSyncChartData = async () => {
-    const symbol = params?.get("symbol");
-    const type = params?.get("type");
+    if (!params?.symbolId) return;
 
-    if (!symbol || !type) return;
-
-    await syncChartData(symbol, type);
-    await getChartData(symbol, type);
+    await syncChartData(params?.symbolId);
+    await getChartData(params?.symbolId);
   };
 
   const handleOpenDrawer = () => {
@@ -71,9 +65,7 @@ export const ChartPage = () => {
   };
 
   const handleAddMarker = () => {
-    const symbol = params?.get("symbol");
-
-    addMarker(symbol);
+    addMarker(params?.symbolId);
   };
 
   const handleChangeMarker: ChangeEventHandler<HTMLTextAreaElement> = e => {
@@ -81,10 +73,8 @@ export const ChartPage = () => {
   };
 
   const handleSaveMarker = async () => {
-    const symbol = params?.get("symbol");
-
-    await saveMarkerData(symbol);
-    await getMarkerData(symbol);
+    await saveMarkerData();
+    await getMarkerData(params?.symbolId);
   };
 
   return (
@@ -115,10 +105,10 @@ export const ChartPage = () => {
         sx={{ overflow: "auto", display: "flex", flexDirection: "column", gap: "24px", width: "100%", height: "100%" }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {symbolData && (
+          {symbol && (
             <Box sx={{ display: "flex", alignItems: "center", gap: "24px" }}>
-              <Chip label={symbolData?.symbol} />
-              <Typography>{symbolData?.name}</Typography>
+              <Chip label={symbol?.ticker} />
+              <Typography>{symbol?.name}</Typography>
             </Box>
           )}
 

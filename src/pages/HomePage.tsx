@@ -16,26 +16,26 @@ export const HomePage = () => {
   }, [getFavorites]);
 
   const handleClickDeleteFavorite: MouseEventHandler<SVGSVGElement> = async e => {
-    const symbol = e.currentTarget.dataset["symbol"];
-    const symbolData = favorites?.find(favorite => favorite.symbol === symbol);
+    const symbolId = e.currentTarget.dataset["symbolId"];
+    const symbol = favorites?.find(favorite => `${favorite.id}` === symbolId);
 
-    if (!symbolData) return;
+    if (!symbol) return;
 
-    await deleteFavorite(symbolData);
+    await deleteFavorite(symbol);
   };
 
   return (
     <Box sx={{ overflow: "auto", width: "100%", height: "100%" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         {favorites?.map(favorite => (
-          <Card key={favorite.symbol} sx={{ display: "flex", alignItems: "center", padding: "8px 16px" }}>
+          <Card key={favorite.id} sx={{ display: "flex", alignItems: "center", padding: "8px 16px" }}>
             <Box sx={{ width: "100px" }}>
-              <Chip label={favorite.symbol} />
+              <Chip label={favorite.ticker} />
             </Box>
 
             <Typography
               component={Link}
-              to={`/chart?symbol=${favorite.symbol}&type=${favorite.type}`}
+              to={`/charts/${favorite.id}`}
               sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
             >
               {favorite.name}
@@ -43,7 +43,7 @@ export const HomePage = () => {
 
             <CloseIcon
               sx={{ marginLeft: "auto", cursor: "pointer" }}
-              data-symbol={favorite.symbol}
+              data-symbol-id={favorite.id}
               onClick={handleClickDeleteFavorite}
             />
           </Card>

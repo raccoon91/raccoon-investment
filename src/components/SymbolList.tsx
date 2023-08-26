@@ -16,7 +16,7 @@ export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, onClickFavor
     () =>
       favorites.reduce(
         (acc, cur) => {
-          acc[cur.symbol] = true;
+          acc[cur.id] = true;
 
           return acc;
         },
@@ -26,25 +26,16 @@ export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, onClickFavor
   );
 
   return (
-    <Box
-      sx={{
-        overflow: "auto",
-        display: "flex",
-        flexWrap: "wrap",
-        alignContent: "baseline",
-        gap: "16px",
-        flex: 1,
-      }}
-    >
-      {symbolList?.map(symbolData => (
-        <Card key={symbolData.symbol} sx={{ display: "flex", flexDirection: "column", gap: "24px", padding: "16px" }}>
+    <Box sx={{ overflow: "auto", display: "flex", flexWrap: "wrap", alignContent: "baseline", gap: "16px", flex: 1 }}>
+      {symbolList?.map(symbol => (
+        <Card key={symbol.id} sx={{ display: "flex", flexDirection: "column", gap: "24px", padding: "16px" }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: "60px" }}>
-            <Chip label={symbolData.symbol} />
+            <Chip label={symbol.ticker} />
 
             <Box sx={{ display: "flex", gap: "8px" }}>
-              <Chip variant="outlined" label={symbolData.exchange} />
-              <Chip variant="outlined" label={symbolData.mic_code} />
-              <Chip variant="outlined" label={symbolData.currency} />
+              <Chip variant="outlined" label={symbol.exchange} />
+              <Chip variant="outlined" label={symbol.mic_code} />
+              <Chip variant="outlined" label={symbol.currency} />
             </Box>
 
             {onClickFavorite && (
@@ -52,9 +43,9 @@ export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, onClickFavor
                 sx={{
                   marginLeft: "auto",
                   cursor: "pointer",
-                  color: favoriteMap[symbolData.symbol] ? "yellow" : "gray",
+                  color: favoriteMap[symbol.id] ? "yellow" : "gray",
                 }}
-                data-symbol={symbolData.symbol}
+                data-symbol-id={symbol.id}
                 onClick={onClickFavorite}
               />
             )}
@@ -62,10 +53,10 @@ export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, onClickFavor
 
           <Typography
             component={Link}
-            to={`/chart?symbol=${symbolData.symbol}&type=${symbolData.type}`}
+            to={`/charts/${symbol.id}`}
             sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
           >
-            {symbolData.name}
+            {symbol.name}
           </Typography>
         </Card>
       ))}

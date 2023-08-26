@@ -24,11 +24,11 @@ export const useFavoriteStore = create<IFavoriteStore>(set => ({
       useGlobalStore.getState().setIsLoad(false);
     }
   },
-  deleteFavorite: async (symbolData?: ISymbolData) => {
+  deleteFavorite: async (symbol?: ISymbolData) => {
     try {
-      if (!symbolData) return;
+      if (!symbol) return;
 
-      await db.favorites.delete(symbolData.symbol);
+      await db.favorites.delete(symbol.id);
 
       const favorites = await db.favorites.toArray();
 
@@ -37,16 +37,16 @@ export const useFavoriteStore = create<IFavoriteStore>(set => ({
       console.error(err);
     }
   },
-  toggleFavorite: async (symbolData?: ISymbolData) => {
+  toggleFavorite: async (symbol?: ISymbolData) => {
     try {
-      if (!symbolData) return;
+      if (!symbol) return;
 
-      const isExist = await db.favorites.get(symbolData.symbol);
+      const isExist = await db.favorites.get(symbol.id);
 
       if (isExist) {
-        await db.favorites.delete(symbolData.symbol);
+        await db.favorites.delete(symbol.id);
       } else {
-        await db.favorites.add(symbolData);
+        await db.favorites.add(symbol);
       }
 
       const favorites = await db.favorites.toArray();

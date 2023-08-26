@@ -1,7 +1,6 @@
 import { Divider, styled } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
-import BusinessIcon from "@mui/icons-material/Business";
 import { NavIcon } from "./NavIcon";
 
 const StyledNavList = styled("nav")`
@@ -20,12 +19,8 @@ export const Sidebar = () => {
 
       <Divider />
 
-      <NavIcon to="/etf" title="ETF">
+      <NavIcon to="/symbols" title="Symbol">
         <LocalAtmIcon />
-      </NavIcon>
-
-      <NavIcon to="/stocks" title="Stock">
-        <BusinessIcon />
       </NavIcon>
     </StyledNavList>
   );
