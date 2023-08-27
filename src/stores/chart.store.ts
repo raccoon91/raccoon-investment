@@ -11,6 +11,7 @@ interface IChartStore {
   chartValues?: ICandleChartData[] | null;
   getChartData: (symbolId?: string, interval?: IChartInterval) => Promise<void>;
   syncChartData: (symbolId?: string, interval?: IChartInterval) => Promise<void>;
+  clearChartData: () => void;
 }
 
 export const useChartStore = create<IChartStore>(set => ({
@@ -69,5 +70,8 @@ export const useChartStore = create<IChartStore>(set => ({
     } finally {
       useGlobalStore.getState().setIsLoad(false);
     }
+  },
+  clearChartData: () => {
+    set({ symbol: null, chartValues: null });
   },
 }));

@@ -24,11 +24,12 @@ const Textarea = styled("textarea")(
 
 export const ChartPage = () => {
   const params = useParams();
-  const { symbol, chartValues, getChartData, syncChartData } = useChartStore(state => ({
+  const { symbol, chartValues, getChartData, syncChartData, clearChartData } = useChartStore(state => ({
     symbol: state.symbol,
     chartValues: state.chartValues,
     getChartData: state.getChartData,
     syncChartData: state.syncChartData,
+    clearChartData: state.clearChartData,
   }));
   const { markers, markerJson, addMarker, changeMarker, getMarkerData, saveMarkerData } = useMarkerStore(state => ({
     markers: state.markers,
@@ -47,6 +48,10 @@ export const ChartPage = () => {
 
     getChartData(params?.symbolId);
     getMarkerData(params?.symbolId);
+
+    return () => {
+      clearChartData();
+    };
   }, [params]);
 
   const handleClickSyncChartData = async () => {
