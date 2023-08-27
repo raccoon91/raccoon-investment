@@ -15,7 +15,7 @@ const StyledNavLink = styled(BaseNavLink)(
     svg {
       width: 20px;
       height: 20px;
-      color: ${theme.palette.grey[500]};
+      color: ${theme.palette.grey[700]};
     }
 
     &.active, &:hover {
@@ -27,6 +27,12 @@ const StyledNavLink = styled(BaseNavLink)(
         background-color: ${theme.palette.divider};
         border-radius: 4px;
         z-index: -1;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        color: ${theme.palette.text.primary};
       }
     }
 
