@@ -1,6 +1,7 @@
 import { MouseEventHandler, useEffect } from "react";
-import { Box } from "@mui/material";
-import { SymbolList } from "../components";
+import { Link } from "react-router-dom";
+import { Box, Card, Chip, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useFavoriteStore } from "../stores";
 
 export const FavoritePage = () => {
@@ -12,7 +13,7 @@ export const FavoritePage = () => {
 
   useEffect(() => {
     getFavorites();
-  }, [getFavorites]);
+  }, []);
 
   const handleDeleteFavorite: MouseEventHandler<SVGSVGElement> = async e => {
     const symbolId = e.currentTarget.dataset["symbolId"];
@@ -25,7 +26,29 @@ export const FavoritePage = () => {
 
   return (
     <Box sx={{ overflow: "auto", width: "100%", height: "100%" }}>
-      <SymbolList symbolList={favorites} onDeleteFavorite={handleDeleteFavorite} />
+      <Box sx={{ display: "flex", flexDirection: "column", gap: "8px", width: "600px" }}>
+        {favorites?.map(favorite => (
+          <Card key={favorite.id} sx={{ display: "flex", alignItems: "center", padding: "8px 16px" }}>
+            <Box sx={{ width: "100px" }}>
+              <Chip label={favorite.ticker} />
+            </Box>
+
+            <Typography
+              component={Link}
+              to={`/charts/${favorite.id}`}
+              sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+            >
+              {favorite.name}
+            </Typography>
+
+            <CloseIcon
+              sx={{ marginLeft: "auto", cursor: "pointer" }}
+              data-symbol-id={favorite.id}
+              onClick={handleDeleteFavorite}
+            />
+          </Card>
+        ))}
+      </Box>
     </Box>
   );
 };

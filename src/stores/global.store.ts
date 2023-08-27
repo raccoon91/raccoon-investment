@@ -1,4 +1,5 @@
 import { Theme, createTheme } from "@mui/material";
+import { grey } from "@mui/material/colors";
 import { create } from "zustand";
 
 const darkTheme = createTheme({
@@ -8,6 +9,19 @@ const darkTheme = createTheme({
     secondary: { main: "#4cc38a" },
     background: { default: "#1c1c1c", paper: "#1c1c1c" },
   },
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        ...{
+          root: {
+            boxShadow: "none",
+            border: "1px solid",
+            borderColor: grey[900],
+          },
+        },
+      },
+    },
+  },
 });
 
 const lightTheme = createTheme({
@@ -15,6 +29,19 @@ const lightTheme = createTheme({
     mode: "light",
     primary: { main: "#42a5f5" },
     secondary: { main: "#4cc38a" },
+  },
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        ...{
+          root: {
+            boxShadow: "none",
+            border: "1px solid",
+            borderColor: grey[900],
+          },
+        },
+      },
+    },
   },
 });
 

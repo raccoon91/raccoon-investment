@@ -1,53 +1,32 @@
-import { MouseEventHandler, useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Box, Card, Chip, Typography } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { Box, Card, IconButton, Typography } from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useFavoriteStore } from "../stores";
 
 export const HomePage = () => {
-  const { favorites, getFavorites, deleteFavorite } = useFavoriteStore(state => ({
+  const { favorites, getFavorites } = useFavoriteStore(state => ({
     favorites: state.favorites,
     getFavorites: state.getFavorites,
-    deleteFavorite: state.deleteFavorite,
   }));
 
   useEffect(() => {
     getFavorites();
-  }, [getFavorites]);
-
-  const handleClickDeleteFavorite: MouseEventHandler<SVGSVGElement> = async e => {
-    const symbolId = e.currentTarget.dataset["symbolId"];
-    const symbol = favorites?.find(favorite => `${favorite.id}` === symbolId);
-
-    if (!symbol) return;
-
-    await deleteFavorite(symbol);
-  };
+  }, []);
 
   return (
     <Box sx={{ overflow: "auto", width: "100%", height: "100%" }}>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-        {favorites?.map(favorite => (
-          <Card key={favorite.id} sx={{ display: "flex", alignItems: "center", padding: "8px 16px" }}>
-            <Box sx={{ width: "100px" }}>
-              <Chip label={favorite.ticker} />
-            </Box>
+      <Box sx={{ display: "flex", gap: "16px" }}>
+        <Card>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "12px", padding: "16px 8px 16px 24px" }}>
+            <Typography>Favorites</Typography>
+            <Typography>{favorites.length ?? "-"}</Typography>
 
-            <Typography
-              component={Link}
-              to={`/charts/${favorite.id}`}
-              sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
-            >
-              {favorite.name}
-            </Typography>
-
-            <CloseIcon
-              sx={{ marginLeft: "auto", cursor: "pointer" }}
-              data-symbol-id={favorite.id}
-              onClick={handleClickDeleteFavorite}
-            />
-          </Card>
-        ))}
+            <IconButton component={Link} size="small" to="/favorites" sx={{ marginLeft: "16px" }}>
+              <ArrowForwardIcon />
+            </IconButton>
+          </Box>
+        </Card>
       </Box>
     </Box>
   );
