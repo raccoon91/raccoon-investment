@@ -1,26 +1,33 @@
-import { ChangeEvent, KeyboardEventHandler, MouseEventHandler } from "react";
-import { Box, Button, IconButton, InputAdornment, TextField } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { ChangeEvent, FormEvent, MouseEventHandler } from "react";
+import { Box, Button, SelectChangeEvent } from "@mui/material";
 import CloudSyncIcon from "@mui/icons-material/CloudSync";
+import { SearchInput, SymbolList } from "../components";
 import { useFavoriteStore, useSymbolStore } from "../stores";
-import { SymbolList } from "../components";
 
 export const SymbolPage = () => {
   const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);
-  const { search, symbolList, changeSearch, getSymbolData, syncSymbolData } = useSymbolStore(state => ({
-    search: state.search,
-    symbolList: state.symbolList,
-    changeSearch: state.changeSearch,
-    getSymbolData: state.getSymbolData,
-    syncSymbolData: state.syncSymbolData,
-  }));
+  const { column, search, symbolList, changeColumn, changeSearch, getSymbolData, syncSymbolData } = useSymbolStore(
+    state => ({
+      column: state.column,
+      search: state.search,
+      symbolList: state.symbolList,
+      changeColumn: state.changeColumn,
+      changeSearch: state.changeSearch,
+      getSymbolData: state.getSymbolData,
+      syncSymbolData: state.syncSymbolData,
+    })
+  );
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeColumn = (e: SelectChangeEvent<string>) => {
+    changeColumn(e.target.value);
+  };
+
+  const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     changeSearch(e.target.value);
   };
 
-  const handleEnter: KeyboardEventHandler<HTMLInputElement> = async e => {
-    if (e.key !== "Enter") return;
+  const handleSearchSearch = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     await getSymbolData();
   };
@@ -37,20 +44,12 @@ export const SymbolPage = () => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "24px", width: "100%", height: "100%" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <TextField
-          size="small"
-          value={search}
-          onChange={handleChange}
-          onKeyDown={handleEnter}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton edge="end" color="primary">
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
+        <SearchInput
+          column={column}
+          search={search}
+          onChangeColumn={handleChangeColumn}
+          onChangeSearch={handleChangeSearch}
+          onSubmit={handleSearchSearch}
         />
 
         <Button variant="contained" onClick={syncSymbolData}>

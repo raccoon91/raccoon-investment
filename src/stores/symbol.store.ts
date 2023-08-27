@@ -4,21 +4,28 @@ import { useGlobalStore } from "./global.store";
 import { supabase } from "../db";
 
 interface ISymbolStore {
+  column: string;
   search: string;
   symbolList: ISymbolData[] | null;
+  changeColumn: (value?: string) => void;
   changeSearch: (value?: string) => void;
   getSymbolData: () => Promise<void>;
   syncSymbolData: () => Promise<void>;
 }
 
 export const useSymbolStore = create<ISymbolStore>((set, get) => ({
+  column: "name",
   search: "",
   symbolList: null,
+  changeColumn: (value?: string) => {
+    set({ column: value });
+  },
   changeSearch: (value?: string) => {
     set({ search: value });
   },
   getSymbolData: async () => {
     try {
+      const column = get().column;
       const search = get().search;
 
       if (!search) {
@@ -29,7 +36,7 @@ export const useSymbolStore = create<ISymbolStore>((set, get) => ({
 
       useGlobalStore.getState().setIsLoad(true);
 
-      const { data } = await supabase.from("symbols").select("*").ilike("name", `%${search}%`);
+      const { data } = await supabase.from("symbols").select("*").ilike(column, `%${search}%`);
 
       set({ symbolList: data ?? [] });
     } catch (err) {
