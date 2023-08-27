@@ -1,18 +1,50 @@
-import { Outlet } from "react-router-dom";
-import { Box, CircularProgress, Switch } from "@mui/material";
+import { useCallback, useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { Box, CircularProgress, IconButton, Switch, Typography } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { Sidebar } from "./Sidebar";
-import { useGlobalStore } from "../stores";
+import { useGlobalStore, useUserStore } from "../stores";
 
 export const Layout = () => {
+  const navigate = useNavigate();
   const isLoad = useGlobalStore(state => state.isLoad);
+  const { user, getUser, signout } = useUserStore(state => ({
+    user: state.user,
+    getUser: state.getUser,
+    signout: state.signout,
+  }));
   const { mode, toggleMode } = useGlobalStore(state => ({
     mode: state.mode,
     toggleMode: state.toggleMode,
   }));
 
+  const checkSignin = useCallback(async () => {
+    if (user) return;
+
+    const res = await getUser();
+
+    if (res?.status === "ok") return;
+
+    navigate("/signin");
+  }, [user, getUser]);
+
+  useEffect(() => {
+    checkSignin();
+  }, [checkSignin]);
+
+  const handleSignOut = async () => {
+    const res = await signout();
+
+    if (res?.status === "ok") {
+      navigate("/signin");
+    }
+  };
+
   const handleChangeThemeMode = () => {
     toggleMode();
   };
+
+  if (!user) return null;
 
   return (
     <Box sx={{ overflow: "hidden", display: "flex", width: "100vw", height: "100vh" }}>
@@ -34,7 +66,7 @@ export const Layout = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
             flex: "0 0 48px",
             height: "48px",
             padding: "0 24px",
@@ -42,6 +74,16 @@ export const Layout = () => {
             borderColor: "divider",
           }}
         >
+          <Box sx={{ display: "flex", alignItems: "center", gap: "24px" }}>
+            <Typography>{user?.email ?? ""}</Typography>
+
+            {user && (
+              <IconButton size="small" color="primary" onClick={handleSignOut}>
+                <LogoutIcon />
+              </IconButton>
+            )}
+          </Box>
+
           <Switch checked={mode === "dark"} onChange={handleChangeThemeMode} />
         </Box>
 

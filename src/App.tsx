@@ -1,6 +1,6 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ChartPage, FavoritePage, HomePage, SymbolPage } from "./pages";
+import { ChartPage, FavoritePage, HomePage, SignInPage, SymbolPage } from "./pages";
 import { Layout } from "./layouts";
 import { useGlobalStore } from "./stores";
 
@@ -19,6 +19,8 @@ export const App = () => {
             <Route path="favorites" element={<FavoritePage />} />
             <Route path="charts/:symbolId" element={<ChartPage />} />
           </Route>
+
+          <Route path="signin" element={<SignInPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
