@@ -2,74 +2,64 @@ import { FC, MouseEventHandler, memo, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Box, Card, Chip, Typography } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
-import CloseIcon from "@mui/icons-material/Close";
+import { useFavoriteStore } from "../stores";
 
 interface ISymbolListProps {
   symbolList: ISymbolData[] | null;
-  favoriteList?: ISymbolData[] | null;
   onClickFavorite?: MouseEventHandler<SVGSVGElement>;
-  onDeleteFavorite?: MouseEventHandler<SVGSVGElement>;
 }
 
-export const SymbolList: FC<ISymbolListProps> = memo(
-  ({ symbolList, favoriteList, onClickFavorite, onDeleteFavorite }) => {
-    const favoriteMap = useMemo(
-      () =>
-        favoriteList?.reduce(
-          (acc, cur) => {
-            acc[cur.id] = true;
+export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, onClickFavorite }) => {
+  const favorites = useFavoriteStore(state => state.favorites);
 
-            return acc;
-          },
-          {} as Record<string, boolean>
-        ) ?? {},
-      [favoriteList]
-    );
+  const favoriteMap = useMemo(
+    () =>
+      favorites?.reduce(
+        (acc, cur) => {
+          acc[cur.id] = true;
 
-    return (
-      <Box sx={{ overflow: "auto", display: "flex", flexWrap: "wrap", alignContent: "baseline", gap: "16px", flex: 1 }}>
-        {symbolList?.map(symbol => (
-          <Card key={symbol.id} sx={{ display: "flex", flexDirection: "column", gap: "24px", padding: "16px" }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: "60px" }}>
-              <Chip label={symbol.ticker} />
+          return acc;
+        },
+        {} as Record<string, boolean>
+      ) ?? {},
+    [favorites]
+  );
 
-              <Box sx={{ display: "flex", gap: "8px" }}>
-                <Chip variant="outlined" label={symbol.exchange} />
-                <Chip variant="outlined" label={symbol.mic_code} />
-                <Chip variant="outlined" label={symbol.currency} />
-              </Box>
+  return (
+    <Box sx={{ overflow: "auto", display: "flex", flexWrap: "wrap", alignContent: "baseline", gap: "16px", flex: 1 }}>
+      {symbolList?.map(symbol => (
+        <Card key={symbol.id} sx={{ display: "flex", flexDirection: "column", gap: "24px", padding: "16px" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "60px" }}>
+            <Chip label={symbol.ticker} />
 
-              {onClickFavorite && (
-                <StarIcon
-                  sx={{
-                    marginLeft: "auto",
-                    cursor: "pointer",
-                    color: favoriteMap[symbol.id] ? "yellow" : "gray",
-                  }}
-                  data-symbol-id={symbol.id}
-                  onClick={onClickFavorite}
-                />
-              )}
-
-              {onDeleteFavorite && (
-                <CloseIcon
-                  sx={{ marginLeft: "auto", cursor: "pointer" }}
-                  data-symbol-id={symbol.id}
-                  onClick={onDeleteFavorite}
-                />
-              )}
+            <Box sx={{ display: "flex", gap: "8px" }}>
+              <Chip variant="outlined" label={symbol.exchange} />
+              <Chip variant="outlined" label={symbol.mic_code} />
+              <Chip variant="outlined" label={symbol.currency} />
             </Box>
 
-            <Typography
-              component={Link}
-              to={`/charts/${symbol.id}`}
-              sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
-            >
-              {symbol.name}
-            </Typography>
-          </Card>
-        ))}
-      </Box>
-    );
-  }
-);
+            {onClickFavorite && (
+              <StarIcon
+                sx={{
+                  marginLeft: "auto",
+                  cursor: "pointer",
+                  color: favoriteMap[symbol.id] ? "yellow" : "gray",
+                }}
+                data-symbol-id={symbol.id}
+                onClick={onClickFavorite}
+              />
+            )}
+          </Box>
+
+          <Typography
+            component={Link}
+            to={`/charts/${symbol.id}`}
+            sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+          >
+            {symbol.name}
+          </Typography>
+        </Card>
+      ))}
+    </Box>
+  );
+});
