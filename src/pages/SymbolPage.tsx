@@ -5,7 +5,10 @@ import { SearchInput, SymbolList } from "../components";
 import { useFavoriteStore, useSymbolStore } from "../stores";
 
 export const SymbolPage = () => {
-  const toggleFavorite = useFavoriteStore(state => state.toggleFavorite);
+  const { favorites, toggleFavorite } = useFavoriteStore(state => ({
+    favorites: state.favorites,
+    toggleFavorite: state.toggleFavorite,
+  }));
   const { column, search, symbolList, changeColumn, changeSearch, getSymbolData, syncSymbolData } = useSymbolStore(
     state => ({
       column: state.column,
@@ -57,7 +60,7 @@ export const SymbolPage = () => {
         </Button>
       </Box>
 
-      <SymbolList symbolList={symbolList} onClickFavorite={handleClickFavorite} />
+      <SymbolList symbolList={symbolList} favoriteList={favorites} onClickFavorite={handleClickFavorite} />
     </Box>
   );
 };
