@@ -7,7 +7,7 @@ import { db } from "../db";
 type IChartInterval = "1min" | "5min" | "15min" | "30min" | "45min" | "1h" | "2h" | "4h" | "1day" | "1week" | "1month";
 
 interface IChartStore {
-  symbol: ISymbolData | null;
+  symbol: Supabase["public"]["Tables"]["symbols"]["Row"][] | null;
   chartValues?: ICandleChartData[] | null;
   getChartData: (symbolId?: string, interval?: IChartInterval) => Promise<void>;
   syncChartData: (symbolId?: string, interval?: IChartInterval) => Promise<void>;

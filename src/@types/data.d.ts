@@ -1,14 +1,3 @@
-type ISymbolData = {
-  id: number;
-  ticker: string;
-  name: string;
-  country?: string | null;
-  currency?: string | null;
-  exchange?: string | null;
-  mic_code?: string | null;
-  type: string;
-};
-
 type ICandleChartData = {
   id: number;
   time: string;

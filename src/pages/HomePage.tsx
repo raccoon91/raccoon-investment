@@ -1,32 +1,40 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Box, Card, IconButton, Typography } from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Box, Card, Chip, Divider, Typography } from "@mui/material";
 import { useFavoriteStore } from "../stores";
 
 export const HomePage = () => {
-  const { favorites, getFavorites } = useFavoriteStore(state => ({
-    favorites: state.favorites,
-    getFavorites: state.getFavorites,
+  const { favoriteGroupList, getFavoriteData } = useFavoriteStore(state => ({
+    favoriteGroupList: state.favoriteGroupList,
+    getFavoriteData: state.getFavoriteData,
   }));
 
   useEffect(() => {
-    getFavorites();
+    getFavoriteData();
   }, []);
 
   return (
     <Box sx={{ overflow: "auto", width: "100%", height: "100%" }}>
-      <Box sx={{ display: "flex", gap: "16px" }}>
-        <Card>
-          <Box sx={{ display: "flex", alignItems: "center", gap: "12px", padding: "16px 8px 16px 24px" }}>
-            <Typography>Favorites</Typography>
-            <Typography>{favorites.length ?? "-"}</Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+        {favoriteGroupList.map(group => (
+          <Card key={group.name}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "16px", padding: "16px" }}>
+              <Typography>{group.name}</Typography>
 
-            <IconButton component={Link} size="small" to="/favorites" sx={{ marginLeft: "16px" }}>
-              <ArrowForwardIcon />
-            </IconButton>
-          </Box>
-        </Card>
+              <Divider />
+
+              <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {group.favorites.map(favorite => (
+                  <Box key={favorite.id} sx={{ display: "flex", alignItems: "center" }}>
+                    <Box sx={{ width: "100px" }}>
+                      <Chip label={favorite.symbol?.ticker} />
+                    </Box>
+                    <Typography>{favorite.symbol?.name}</Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Card>
+        ))}
       </Box>
     </Box>
   );

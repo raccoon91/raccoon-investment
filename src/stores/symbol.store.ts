@@ -6,7 +6,7 @@ import { supabase } from "../db";
 interface ISymbolStore {
   column: string;
   search: string;
-  symbolList: ISymbolData[] | null;
+  symbolList: Supabase["public"]["Tables"]["symbols"]["Row"][] | null;
   changeColumn: (value?: string) => void;
   changeSearch: (value?: string) => void;
   getSymbolData: () => Promise<void>;
@@ -14,7 +14,7 @@ interface ISymbolStore {
 }
 
 export const useSymbolStore = create<ISymbolStore>((set, get) => ({
-  column: "name",
+  column: "ticker",
   search: "",
   symbolList: null,
   changeColumn: (value?: string) => {

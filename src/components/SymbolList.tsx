@@ -1,30 +1,15 @@
-import { FC, MouseEventHandler, memo, useMemo } from "react";
+import { FC, MouseEventHandler, memo } from "react";
 import { Link } from "react-router-dom";
 import { Box, Card, Chip, Typography } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
-import { useFavoriteStore } from "../stores";
 
 interface ISymbolListProps {
-  symbolList: ISymbolData[] | null;
+  symbolList: Supabase["public"]["Tables"]["symbols"]["Row"][] | null;
+  favoriteMap: Record<number, any>;
   onClickFavorite?: MouseEventHandler<SVGSVGElement>;
 }
 
-export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, onClickFavorite }) => {
-  const favorites = useFavoriteStore(state => state.favorites);
-
-  const favoriteMap = useMemo(
-    () =>
-      favorites?.reduce(
-        (acc, cur) => {
-          acc[cur.id] = true;
-
-          return acc;
-        },
-        {} as Record<string, boolean>
-      ) ?? {},
-    [favorites]
-  );
-
+export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, favoriteMap, onClickFavorite }) => {
   return (
     <Box sx={{ overflow: "auto", display: "flex", flexWrap: "wrap", alignContent: "baseline", gap: "16px", flex: 1 }}>
       {symbolList?.map(symbol => (
@@ -40,11 +25,7 @@ export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, onClickFavor
 
             {onClickFavorite && (
               <StarIcon
-                sx={{
-                  marginLeft: "auto",
-                  cursor: "pointer",
-                  color: favoriteMap[symbol.id] ? "yellow" : "gray",
-                }}
+                sx={{ marginLeft: "auto", cursor: "pointer", color: favoriteMap[symbol.id] ? "yellow" : "gray" }}
                 data-symbol-id={symbol.id}
                 onClick={onClickFavorite}
               />

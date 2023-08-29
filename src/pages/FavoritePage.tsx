@@ -1,51 +1,65 @@
 import { MouseEventHandler, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Box, Card, Chip, Typography } from "@mui/material";
+import { Box, Card, Chip, Divider, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useFavoriteStore } from "../stores";
 
 export const FavoritePage = () => {
-  const { favorites, getFavorites, deleteFavorite } = useFavoriteStore(state => ({
-    favorites: state.favorites,
-    getFavorites: state.getFavorites,
+  const { favoriteGroupList, getFavoriteData, deleteFavorite } = useFavoriteStore(state => ({
+    favoriteGroupList: state.favoriteGroupList,
+    getFavoriteData: state.getFavoriteData,
     deleteFavorite: state.deleteFavorite,
   }));
 
   useEffect(() => {
-    getFavorites();
+    getFavoriteData();
   }, []);
 
   const handleDeleteFavorite: MouseEventHandler<SVGSVGElement> = async e => {
-    const symbolId = e.currentTarget.dataset["symbolId"];
-    const symbol = favorites?.find(favorite => `${favorite.id}` === symbolId);
+    const favoriteId = e.currentTarget.dataset["favoriteId"];
 
-    if (!symbol) return;
+    if (!favoriteId) return;
 
-    await deleteFavorite(symbol);
+    await deleteFavorite(favoriteId);
+    await getFavoriteData();
   };
 
   return (
     <Box sx={{ overflow: "auto", width: "100%", height: "100%" }}>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "8px", width: "600px" }}>
-        {favorites?.map(favorite => (
-          <Card key={favorite.id} sx={{ display: "flex", alignItems: "center", padding: "8px 16px" }}>
-            <Box sx={{ width: "100px" }}>
-              <Chip label={favorite.ticker} />
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+        {favoriteGroupList.map(group => (
+          <Card key={group.name}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "16px", padding: "16px" }}>
+              <Typography>{group.name}</Typography>
+
+              <Divider />
+
+              <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {group.favorites.map(favorite => (
+                  <Box key={favorite.id} sx={{ display: "flex", alignItems: "center" }}>
+                    <Box sx={{ width: "100px" }}>
+                      <Chip label={favorite.symbol?.ticker} />
+                    </Box>
+
+                    <Typography
+                      component={Link}
+                      to={`/charts/${favorite.id}`}
+                      sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                    >
+                      {favorite.symbol?.name}
+                    </Typography>
+
+                    <Box sx={{ minWidth: "60px", flex: 1, textAlign: "right" }}>
+                      <CloseIcon
+                        sx={{ cursor: "pointer" }}
+                        data-favorite-id={favorite.id}
+                        onClick={handleDeleteFavorite}
+                      />
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
             </Box>
-
-            <Typography
-              component={Link}
-              to={`/charts/${favorite.id}`}
-              sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
-            >
-              {favorite.name}
-            </Typography>
-
-            <CloseIcon
-              sx={{ marginLeft: "auto", cursor: "pointer" }}
-              data-symbol-id={favorite.id}
-              onClick={handleDeleteFavorite}
-            />
           </Card>
         ))}
       </Box>
