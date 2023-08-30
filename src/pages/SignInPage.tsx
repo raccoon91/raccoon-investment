@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Center, Heading, Input } from "@chakra-ui/react";
 import { useUserStore } from "../stores";
 
 export const SignInPage = () => {
@@ -27,41 +27,17 @@ export const SignInPage = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "36px",
-        width: "100vw",
-        height: "100vh",
-      }}
-    >
-      <Typography component="h1" sx={{ fontSize: "20px", fontWeight: "bold" }}>
-        Sign In
-      </Typography>
+    <Center gap="36px" w="100vw" h="100vh">
+      <Heading>Sign In</Heading>
 
-      <Box
-        component="form"
-        sx={{ display: "flex", flexDirection: "column", gap: "24px", width: "280px" }}
-        onSubmit={handleSubmitSignIn}
-      >
-        <TextField size="small" label="email" name="email" value={signinValue.email} onChange={handleChangeInput} />
-
-        <TextField
-          type="password"
-          size="small"
-          label="password"
-          name="password"
-          value={signinValue.password}
-          onChange={handleChangeInput}
-        />
+      <Box as="form" gap="24px" w="280px" onSubmit={handleSubmitSignIn}>
+        <Input size="small" name="email" value={signinValue.email} onChange={handleChangeInput} />
+        <Input type="password" size="small" name="password" value={signinValue.password} onChange={handleChangeInput} />
 
         <Button type="submit" variant="contained">
           Sign In
         </Button>
       </Box>
-    </Box>
+    </Center>
   );
 };

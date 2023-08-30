@@ -1,7 +1,7 @@
 import { MouseEventHandler, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Box, Card, Chip, Divider, Typography } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { Box, Card, CardBody, CardHeader, HStack, Tag, Text, Wrap } from "@chakra-ui/react";
+import { StarIcon } from "@chakra-ui/icons";
 import { useFavoriteStore } from "../stores";
 
 export const FavoritePage = () => {
@@ -25,44 +25,39 @@ export const FavoritePage = () => {
   };
 
   return (
-    <Box sx={{ overflow: "auto", width: "100%", height: "100%" }}>
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+    <Box overflow="auto" w="full" h="full">
+      <Wrap gap="16px">
         {groupList.map(group => (
           <Card key={group.name}>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "16px", padding: "16px" }}>
-              <Typography>{group.name}</Typography>
+            <CardHeader>
+              <Text>{group.name}</Text>
+            </CardHeader>
 
-              <Divider />
-
-              <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                {group.favorites.map(favorite => (
-                  <Box key={favorite.id} sx={{ display: "flex", alignItems: "center" }}>
-                    <Box sx={{ width: "100px" }}>
-                      <Chip label={favorite.symbols?.ticker} />
-                    </Box>
-
-                    <Typography
-                      component={Link}
-                      to={`/charts/${favorite.symbols?.id}`}
-                      sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
-                    >
-                      {favorite.symbols?.name}
-                    </Typography>
-
-                    <Box sx={{ minWidth: "60px", flex: 1, textAlign: "right" }}>
-                      <CloseIcon
-                        sx={{ cursor: "pointer" }}
-                        data-favorite-id={favorite.id}
-                        onClick={handleDeleteFavorite}
-                      />
-                    </Box>
+            <CardBody>
+              {group.favorites.map(favorite => (
+                <HStack key={favorite.id}>
+                  <Box w="100px">
+                    <Tag>{favorite.symbols?.ticker}</Tag>
                   </Box>
-                ))}
-              </Box>
-            </Box>
+
+                  <Text
+                    as={Link}
+                    to={`/charts/${favorite.symbols?.id}`}
+                    textDecoration="none"
+                    _hover={{ textDecoration: "underline" }}
+                  >
+                    {favorite.symbols?.name}
+                  </Text>
+
+                  <Box>
+                    <StarIcon cursor="pointer" data-favorite-id={favorite.id} onClick={handleDeleteFavorite} />
+                  </Box>
+                </HStack>
+              ))}
+            </CardBody>
           </Card>
         ))}
-      </Box>
+      </Wrap>
     </Box>
   );
 };

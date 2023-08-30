@@ -1,7 +1,6 @@
 import { FC, useEffect, useRef } from "react";
-import { Box } from "@mui/material";
 import { IChartApi, MouseEventParams, createChart } from "lightweight-charts";
-import { useGlobalStore } from "../stores";
+import { Box } from "@chakra-ui/react";
 
 interface IChartProps {
   chartValues?: ICandleChartData[] | null;
@@ -11,7 +10,6 @@ interface IChartProps {
 export const Chart: FC<IChartProps> = ({ chartValues, markers }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<IChartApi | null>(null);
-  const theme = useGlobalStore(state => state.theme);
 
   useEffect(() => {
     if (!chartRef.current || !chartValues || !markers) return;
@@ -22,25 +20,25 @@ export const Chart: FC<IChartProps> = ({ chartValues, markers }) => {
 
     chartInstance.current = createChart(chartRef.current, {
       layout: {
-        background: { color: theme.palette.background.default },
-        textColor: theme.palette.text.primary,
+        background: { color: "black" },
+        textColor: "white",
       },
       grid: {
-        vertLines: { color: theme.palette.divider },
-        horzLines: { color: theme.palette.divider },
+        vertLines: { color: "gray" },
+        horzLines: { color: "gray" },
       },
     });
 
     const candlestickSeries = chartInstance.current.addCandlestickSeries({
-      upColor: theme.palette.error.main,
-      downColor: theme.palette.info.main,
+      upColor: "red",
+      downColor: "blue",
       borderVisible: false,
-      wickUpColor: theme.palette.error.main,
-      wickDownColor: theme.palette.info.main,
+      wickUpColor: "red",
+      wickDownColor: "blue",
     });
 
     candlestickSeries.setData(chartValues);
-    candlestickSeries.setMarkers(markers);
+    // candlestickSeries.setMarkers(markers);
 
     chartInstance.current.timeScale().fitContent();
     chartInstance.current.subscribeClick(handleChartClick);
@@ -49,7 +47,7 @@ export const Chart: FC<IChartProps> = ({ chartValues, markers }) => {
       chartInstance.current?.unsubscribeClick(handleChartClick);
       chartInstance.current?.remove();
     };
-  }, [chartRef, chartInstance, theme, chartValues, markers]);
+  }, [chartRef, chartInstance, chartValues, markers]);
 
-  return <Box ref={chartRef} sx={{ width: "100%", height: "100%" }} />;
+  return <Box ref={chartRef} w="full" h="full" />;
 };

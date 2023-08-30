@@ -1,39 +1,25 @@
-import { Divider, styled } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
-import LocalAtmIcon from "@mui/icons-material/LocalAtm";
-import StarIcon from "@mui/icons-material/Star";
-import CalculateIcon from "@mui/icons-material/Calculate";
+import { StackDivider, VStack } from "@chakra-ui/react";
+import { StarIcon } from "@chakra-ui/icons";
 import { NavIcon } from "./NavIcon";
-
-const StyledNavList = styled("nav")`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 0 10px;
-`;
 
 export const Sidebar = () => {
   return (
-    <StyledNavList>
-      <NavIcon to="/" title="Home">
-        <HomeIcon />
-      </NavIcon>
-
-      <Divider />
-
-      <NavIcon to="/symbols" title="Symbol">
-        <LocalAtmIcon />
-      </NavIcon>
-
-      <NavIcon to="/favorites" title="Favorite">
+    <VStack as="nav" spacing="8px" divider={<StackDivider borderColor="gray.700" />}>
+      <NavIcon to="/" label="Home">
         <StarIcon />
       </NavIcon>
 
-      <Divider />
-
-      <NavIcon to="/calculators" title="Calculator">
-        <CalculateIcon />
+      <NavIcon to="/symbols" label="Symbol">
+        <StarIcon />
       </NavIcon>
-    </StyledNavList>
+
+      <NavIcon to="/favorites" label="Favorite">
+        <StarIcon />
+      </NavIcon>
+
+      <NavIcon to="/calculators" label="Calculator">
+        <StarIcon />
+      </NavIcon>
+    </VStack>
   );
 };

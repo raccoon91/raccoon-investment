@@ -1,16 +1,17 @@
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { useMemo } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { ChartPage, FavoritePage, HomePage, SignInPage, SymbolPage } from "./pages";
 import { Layout } from "./layouts";
 import { useGlobalStore } from "./stores";
 
 export const App = () => {
-  const theme = useGlobalStore(state => state.theme);
+  const mode = useGlobalStore(state => state.mode);
+
+  const theme = useMemo(() => extendTheme({ initialColorMode: "dark", useSystemColorMode: true }), [mode]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-
+    <ChakraProvider resetCSS theme={theme}>
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
@@ -23,6 +24,6 @@ export const App = () => {
           <Route path="signin" element={<SignInPage />} />
         </Routes>
       </BrowserRouter>
-    </ThemeProvider>
+    </ChakraProvider>
   );
 };

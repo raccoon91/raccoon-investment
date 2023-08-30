@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Box, CircularProgress, IconButton, Switch, Typography } from "@mui/material";
-import LogoutIcon from "@mui/icons-material/Logout";
+import { Box, Center, Flex, HStack, IconButton, Spinner, Switch, Text, VStack } from "@chakra-ui/react";
+import { ChevronRightIcon } from "@chakra-ui/icons";
 import { Sidebar } from "./Sidebar";
 import { useGlobalStore, useUserStore } from "../stores";
 
@@ -47,67 +47,41 @@ export const Layout = () => {
   if (!user) return null;
 
   return (
-    <Box sx={{ overflow: "hidden", display: "flex", width: "100vw", height: "100vh" }}>
-      <Box
-        sx={{
-          flex: "0 0 60px",
-          width: "60px",
-          borderRight: "1px solid",
-          borderColor: "divider",
-          padding: "48px 0",
-          boxSizing: "content-box",
-        }}
-      >
+    <Flex overflow="hidden" w="100vw" h="100vh">
+      <Box flex="0 0 60px" w="60px" py="48px" borderRight="1px solid" borderColor="gray.700" boxSizing="content-box">
         <Sidebar />
       </Box>
 
-      <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flex: "0 0 48px",
-            height: "48px",
-            padding: "0 24px",
-            borderBottom: "1px solid",
-            borderColor: "divider",
-          }}
+      <VStack flex="1" align="stretch">
+        <HStack
+          h="48px"
+          flex="0 0 48px"
+          px="48px"
+          borderBottom="1px solid"
+          borderColor="gray.700"
+          justify="space-between"
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: "24px" }}>
-            <Typography>{user?.email ?? ""}</Typography>
+          <HStack spacing="24px">
+            <Text>{user?.email ?? ""}</Text>
 
             {user && (
-              <IconButton size="small" color="primary" onClick={handleSignOut}>
-                <LogoutIcon />
-              </IconButton>
+              <IconButton aria-label="logout" icon={<ChevronRightIcon boxSize="16px" />} onClick={handleSignOut} />
             )}
-          </Box>
+          </HStack>
 
-          <Switch checked={mode === "dark"} onChange={handleChangeThemeMode} />
-        </Box>
+          <Switch isChecked={mode === "dark"} onChange={handleChangeThemeMode} />
+        </HStack>
 
-        <Box sx={{ position: "relative", overflow: "hidden", flex: 1, padding: "30px" }}>
+        <Box overflow="hidden" position="relative" flex="1" p="30px">
           {isLoad && (
-            <Box
-              sx={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <CircularProgress />
-            </Box>
+            <Center position="absolute" top="0" left="0" w="100%" h="100%">
+              <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+            </Center>
           )}
 
           <Outlet />
         </Box>
-      </Box>
-    </Box>
+      </VStack>
+    </Flex>
   );
 };

@@ -1,26 +1,9 @@
-import { ChangeEventHandler, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Button, Chip, Drawer, Typography, styled } from "@mui/material";
-import CloudSyncIcon from "@mui/icons-material/CloudSync";
-import SettingsIcon from "@mui/icons-material/Settings";
-import AddIcon from "@mui/icons-material/Add";
-import SaveIcon from "@mui/icons-material/Save";
-import { useChartStore, useMarkerStore } from "../stores";
+import { Box, Button, Flex, Tag, Text, VStack } from "@chakra-ui/react";
+import { StarIcon } from "@chakra-ui/icons";
 import { Chart } from "../components";
-
-const Textarea = styled("textarea")(
-  ({ theme }) => `
-    width: 100%;
-    height: 100%;
-    background: ${theme.palette.background.paper};
-    padding: 8px;
-    border-radius: 4px;
-    border-color: ${theme.palette.divider};
-    color: ${theme.palette.text.primary};
-    font-size: 16px;
-    resize: none;
-  `
-);
+import { useChartStore, useMarkerStore } from "../stores";
 
 export const ChartPage = () => {
   const params = useParams();
@@ -64,79 +47,75 @@ export const ChartPage = () => {
     setIsOpenDrawer(true);
   };
 
-  const handleCloseDrawer = () => {
-    setIsOpenDrawer(false);
-  };
+  // const handleCloseDrawer = () => {
+  //   setIsOpenDrawer(false);
+  // };
 
-  const handleAddMarker = () => {
-    addMarker(params?.symbolId);
-  };
+  // const handleAddMarker = () => {
+  //   addMarker(params?.symbolId);
+  // };
 
-  const handleChangeMarker: ChangeEventHandler<HTMLTextAreaElement> = e => {
-    changeMarker(e.target.value);
-  };
+  // const handleChangeMarker: ChangeEventHandler<HTMLTextAreaElement> = e => {
+  //   changeMarker(e.target.value);
+  // };
 
-  const handleSaveMarker = async () => {
-    await saveMarkerData();
-    await getMarkerData(params?.symbolId);
-  };
+  // const handleSaveMarker = async () => {
+  //   await saveMarkerData();
+  //   await getMarkerData(params?.symbolId);
+  // };
 
   return (
     <>
-      <Drawer anchor="right" open={isOpenDrawer} onClose={handleCloseDrawer}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "24px", width: "360px", padding: "12px 24px" }}>
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <Typography>Dividen</Typography>
+      {/* <Drawer anchor="right" open={isOpenDrawer} onClose={handleCloseDrawer}>
+        <VStack gap="24px" w="36px" p="12px 24px">
+          <HStack justify="space-between">
+            <Text>Dividen</Text>
 
-            <Button color="primary">
-              <AddIcon onClick={handleAddMarker} />
+            <Button>
+              <StarIcon onClick={handleAddMarker} />
             </Button>
-          </Box>
+          </HStack>
 
-          <Box sx={{ height: "360px" }}>
+          <Box height="360px">
             <Textarea value={markerJson} onChange={handleChangeMarker} />
           </Box>
 
-          <Box sx={{ textAlign: "right" }}>
+          <Box textAlign="right">
             <Button variant="contained" color="success">
-              <SaveIcon onClick={handleSaveMarker} />
+              <StarIcon onClick={handleSaveMarker} />
             </Button>
           </Box>
-        </Box>
-      </Drawer>
+        </VStack>
+      </Drawer> */}
 
-      <Box
-        sx={{ overflow: "auto", display: "flex", flexDirection: "column", gap: "24px", width: "100%", height: "100%" }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+      <VStack overflow="auto" gap="24px" w="full" h="full">
+        <Flex>
           {symbol && (
-            <Box sx={{ display: "flex", alignItems: "center", gap: "24px" }}>
-              <Chip label={symbol?.ticker} />
-              <Typography>{symbol?.name}</Typography>
-            </Box>
+            <Flex gap="24px">
+              <Tag>{symbol?.ticker}</Tag>
+              <Text>{symbol?.name}</Text>
+            </Flex>
           )}
 
-          <Button sx={{ marginLeft: "auto" }} onClick={handleClickSyncChartData}>
-            <CloudSyncIcon />
+          <Button ml="auto" onClick={handleClickSyncChartData}>
+            <StarIcon />
           </Button>
 
           <Button color="info" onClick={handleOpenDrawer}>
-            <SettingsIcon />
+            <StarIcon />
           </Button>
-        </Box>
+        </Flex>
 
-        <Box sx={{ flex: 1 }}>
+        <Box flex="1">
           {isEmpty ? (
-            <Box
-              sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}
-            >
-              <Typography sx={{ fontWeight: "bold" }}>No Chart Data</Typography>
-            </Box>
+            <Flex w="full" h="full">
+              <Text>No Chart Data</Text>
+            </Flex>
           ) : (
             <Chart chartValues={chartValues} markers={markers} />
           )}
         </Box>
-      </Box>
+      </VStack>
     </>
   );
 };

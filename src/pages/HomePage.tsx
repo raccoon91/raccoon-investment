@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Box, Card, Chip, Divider, Typography } from "@mui/material";
+import { Box, Card, CardBody, CardHeader, Flex, Tag, Text, Wrap } from "@chakra-ui/react";
 import { useFavoriteStore } from "../stores";
 
 export const HomePage = () => {
@@ -13,29 +13,27 @@ export const HomePage = () => {
   }, []);
 
   return (
-    <Box sx={{ overflow: "auto", width: "100%", height: "100%" }}>
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+    <Box overflow="auto" w="full" h="full">
+      <Wrap gap="16px">
         {groupList.map(group => (
           <Card key={group.name}>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "16px", padding: "16px" }}>
-              <Typography>{group.name}</Typography>
+            <CardHeader>
+              <Text>{group.name}</Text>
+            </CardHeader>
 
-              <Divider />
-
-              <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                {group.favorites.map(favorite => (
-                  <Box key={favorite.id} sx={{ display: "flex", alignItems: "center" }}>
-                    <Box sx={{ width: "100px" }}>
-                      <Chip label={favorite.symbols?.ticker} />
-                    </Box>
-                    <Typography>{favorite.symbols?.name}</Typography>
+            <CardBody>
+              {group.favorites.map(favorite => (
+                <Flex key={favorite.id}>
+                  <Box w="100px">
+                    <Tag>{favorite.symbols?.ticker}</Tag>
                   </Box>
-                ))}
-              </Box>
-            </Box>
+                  <Text>{favorite.symbols?.name}</Text>
+                </Flex>
+              ))}
+            </CardBody>
           </Card>
         ))}
-      </Box>
+      </Wrap>
     </Box>
   );
 };
