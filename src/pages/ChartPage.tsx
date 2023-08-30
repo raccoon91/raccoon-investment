@@ -58,7 +58,6 @@ export const ChartPage = () => {
     if (!params?.symbolId) return;
 
     await syncChartData(params?.symbolId);
-    await getChartData(params?.symbolId);
   };
 
   const handleOpenDrawer = () => {

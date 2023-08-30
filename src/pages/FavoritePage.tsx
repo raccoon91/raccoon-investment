@@ -5,14 +5,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useFavoriteStore } from "../stores";
 
 export const FavoritePage = () => {
-  const { favoriteGroupList, getFavoriteData, deleteFavorite } = useFavoriteStore(state => ({
-    favoriteGroupList: state.favoriteGroupList,
-    getFavoriteData: state.getFavoriteData,
+  const { groupList, getGroupData, deleteFavorite } = useFavoriteStore(state => ({
+    groupList: state.groupList,
+    getGroupData: state.getGroupData,
     deleteFavorite: state.deleteFavorite,
   }));
 
   useEffect(() => {
-    getFavoriteData();
+    getGroupData();
   }, []);
 
   const handleDeleteFavorite: MouseEventHandler<SVGSVGElement> = async e => {
@@ -21,13 +21,13 @@ export const FavoritePage = () => {
     if (!favoriteId) return;
 
     await deleteFavorite(favoriteId);
-    await getFavoriteData();
+    await getGroupData();
   };
 
   return (
     <Box sx={{ overflow: "auto", width: "100%", height: "100%" }}>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
-        {favoriteGroupList.map(group => (
+        {groupList.map(group => (
           <Card key={group.name}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: "16px", padding: "16px" }}>
               <Typography>{group.name}</Typography>
@@ -38,15 +38,15 @@ export const FavoritePage = () => {
                 {group.favorites.map(favorite => (
                   <Box key={favorite.id} sx={{ display: "flex", alignItems: "center" }}>
                     <Box sx={{ width: "100px" }}>
-                      <Chip label={favorite.symbol?.ticker} />
+                      <Chip label={favorite.symbols?.ticker} />
                     </Box>
 
                     <Typography
                       component={Link}
-                      to={`/charts/${favorite.id}`}
+                      to={`/charts/${favorite.symbols?.id}`}
                       sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
                     >
-                      {favorite.symbol?.name}
+                      {favorite.symbols?.name}
                     </Typography>
 
                     <Box sx={{ minWidth: "60px", flex: 1, textAlign: "right" }}>
