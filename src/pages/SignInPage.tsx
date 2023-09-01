@@ -1,6 +1,6 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEventHandler, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Center, Heading, Input } from "@chakra-ui/react";
+import { Button, Center, Heading, Input, VStack } from "@chakra-ui/react";
 import { useUserStore } from "../stores";
 
 export const SignInPage = () => {
@@ -8,7 +8,7 @@ export const SignInPage = () => {
   const signin = useUserStore(state => state.signin);
   const [signinValue, setSigninValue] = useState({ email: "", password: "" });
 
-  const handleSubmitSignIn = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmitSignIn: FormEventHandler<HTMLDivElement> = async e => {
     e.preventDefault();
 
     if (!signinValue.email || !signinValue.password) return;
@@ -27,17 +27,25 @@ export const SignInPage = () => {
   };
 
   return (
-    <Center gap="36px" w="100vw" h="100vh">
-      <Heading>Sign In</Heading>
+    <Center w="100vw" h="100vh">
+      <VStack gap="36px">
+        <Heading>Sign In</Heading>
 
-      <Box as="form" gap="24px" w="280px" onSubmit={handleSubmitSignIn}>
-        <Input size="small" name="email" value={signinValue.email} onChange={handleChangeInput} />
-        <Input type="password" size="small" name="password" value={signinValue.password} onChange={handleChangeInput} />
+        <VStack as="form" gap="24px" w="280px" onSubmit={handleSubmitSignIn}>
+          <Input name="email" placeholder="Email" value={signinValue.email} onChange={handleChangeInput} />
+          <Input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={signinValue.password}
+            onChange={handleChangeInput}
+          />
 
-        <Button type="submit" variant="contained">
-          Sign In
-        </Button>
-      </Box>
+          <Button type="submit" w="full">
+            Sign In
+          </Button>
+        </VStack>
+      </VStack>
     </Center>
   );
 };

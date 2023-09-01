@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Box, Card, CardBody, CardHeader, Flex, Tag, Text, Wrap } from "@chakra-ui/react";
+import { Box, Card, CardBody, CardHeader, Flex, Heading, Tag, Text, Wrap } from "@chakra-ui/react";
 import { useFavoriteStore } from "../stores";
 
 export const HomePage = () => {
@@ -14,11 +14,13 @@ export const HomePage = () => {
 
   return (
     <Box overflow="auto" w="full" h="full">
-      <Wrap gap="16px">
+      <Wrap spacing="16px">
         {groupList.map(group => (
-          <Card key={group.name}>
+          <Card key={group.name} minW="400px">
             <CardHeader>
-              <Text>{group.name}</Text>
+              <Heading as="h3" fontSize="20px">
+                {group.name}
+              </Heading>
             </CardHeader>
 
             <CardBody>

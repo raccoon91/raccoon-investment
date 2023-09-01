@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Button, Flex, Tag, Text, VStack } from "@chakra-ui/react";
-import { StarIcon } from "@chakra-ui/icons";
+import { Box, Center, HStack, Icon, IconButton, Tag, Text, VStack } from "@chakra-ui/react";
+import { DownloadCloud, Settings } from "react-feather";
 import { Chart } from "../components";
 import { useChartStore, useMarkerStore } from "../stores";
 
@@ -88,29 +88,36 @@ export const ChartPage = () => {
         </VStack>
       </Drawer> */}
 
-      <VStack overflow="auto" gap="24px" w="full" h="full">
-        <Flex>
+      <VStack overflow="auto" gap="24px" align="stretch" w="full" h="full">
+        <HStack>
           {symbol && (
-            <Flex gap="24px">
+            <HStack gap="24px">
               <Tag>{symbol?.ticker}</Tag>
               <Text>{symbol?.name}</Text>
-            </Flex>
+            </HStack>
           )}
 
-          <Button ml="auto" onClick={handleClickSyncChartData}>
-            <StarIcon />
-          </Button>
+          <IconButton
+            ml="auto"
+            aria-label="sync database"
+            icon={<Icon as={DownloadCloud} />}
+            onClick={handleClickSyncChartData}
+          />
 
-          <Button color="info" onClick={handleOpenDrawer}>
-            <StarIcon />
-          </Button>
-        </Flex>
+          <IconButton
+            ml="8px"
+            colorScheme="gray"
+            aria-label="sync database"
+            icon={<Icon as={Settings} />}
+            onClick={handleOpenDrawer}
+          />
+        </HStack>
 
         <Box flex="1">
           {isEmpty ? (
-            <Flex w="full" h="full">
+            <Center w="full" h="full">
               <Text>No Chart Data</Text>
-            </Flex>
+            </Center>
           ) : (
             <Chart chartValues={chartValues} markers={markers} />
           )}

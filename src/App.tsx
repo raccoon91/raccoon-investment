@@ -1,15 +1,10 @@
-import { useMemo } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { ChartPage, FavoritePage, HomePage, SignInPage, SymbolPage } from "./pages";
 import { Layout } from "./layouts";
-import { useGlobalStore } from "./stores";
+import { theme } from "./styles";
 
 export const App = () => {
-  const mode = useGlobalStore(state => state.mode);
-
-  const theme = useMemo(() => extendTheme({ initialColorMode: "dark", useSystemColorMode: true }), [mode]);
-
   return (
     <ChakraProvider resetCSS theme={theme}>
       <BrowserRouter>

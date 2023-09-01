@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, MouseEventHandler } from "react";
-import { Button, HStack, VStack } from "@chakra-ui/react";
-import { StarIcon } from "@chakra-ui/icons";
+import { HStack, Icon, IconButton, VStack } from "@chakra-ui/react";
+import { DownloadCloud } from "react-feather";
 import { SearchInput, SymbolList } from "../components";
 import { useFavoriteStore, useSymbolStore } from "../stores";
 
@@ -30,13 +30,13 @@ export const SymbolPage = () => {
     changeSearch(e.target.value);
   };
 
-  const handleSearchSearch = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSearchSearch = async (e: FormEvent<HTMLDivElement>) => {
     e.preventDefault();
 
     await getSymbolData();
   };
 
-  const handleClickFavorite: MouseEventHandler<SVGSVGElement> = async e => {
+  const handleClickFavorite: MouseEventHandler<HTMLButtonElement> = async e => {
     const symbolId = e.currentTarget.dataset["symbolId"];
 
     if (!symbolId) return;
@@ -46,7 +46,7 @@ export const SymbolPage = () => {
   };
 
   return (
-    <VStack gap="24px" w="full" h="full">
+    <VStack align="stretch" gap="24px" w="full" h="full">
       <HStack justify="space-between">
         <SearchInput
           column={column}
@@ -56,9 +56,7 @@ export const SymbolPage = () => {
           onSubmit={handleSearchSearch}
         />
 
-        <Button variant="contained" onClick={syncSymbolData}>
-          <StarIcon />
-        </Button>
+        <IconButton aria-label="sync database" icon={<Icon as={DownloadCloud} />} onClick={syncSymbolData} />
       </HStack>
 
       <SymbolList symbolList={symbolList} favoriteMap={favoriteMap} onClickFavorite={handleClickFavorite} />

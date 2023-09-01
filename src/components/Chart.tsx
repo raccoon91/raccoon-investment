@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef } from "react";
 import { IChartApi, MouseEventParams, createChart } from "lightweight-charts";
-import { Box } from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
 
 interface IChartProps {
   chartValues?: ICandleChartData[] | null;
@@ -10,6 +10,11 @@ interface IChartProps {
 export const Chart: FC<IChartProps> = ({ chartValues, markers }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<IChartApi | null>(null);
+  const bg = useColorModeValue("#FFFFFFEB", "#1A202C");
+  const text = useColorModeValue("#1A202C", "#FFFFFFEB");
+  const border = useColorModeValue("#E2E8F0", "#FFFFFF3D");
+  const up = useColorModeValue("#F56565", "#C53030");
+  const down = useColorModeValue("#4299E1", "#2B6CB0");
 
   useEffect(() => {
     if (!chartRef.current || !chartValues || !markers) return;
@@ -20,21 +25,21 @@ export const Chart: FC<IChartProps> = ({ chartValues, markers }) => {
 
     chartInstance.current = createChart(chartRef.current, {
       layout: {
-        background: { color: "black" },
-        textColor: "white",
+        background: { color: bg },
+        textColor: text,
       },
       grid: {
-        vertLines: { color: "gray" },
-        horzLines: { color: "gray" },
+        vertLines: { color: border },
+        horzLines: { color: border },
       },
     });
 
     const candlestickSeries = chartInstance.current.addCandlestickSeries({
-      upColor: "red",
-      downColor: "blue",
+      upColor: up,
+      downColor: down,
       borderVisible: false,
-      wickUpColor: "red",
-      wickDownColor: "blue",
+      wickUpColor: up,
+      wickDownColor: down,
     });
 
     candlestickSeries.setData(chartValues);
@@ -47,7 +52,7 @@ export const Chart: FC<IChartProps> = ({ chartValues, markers }) => {
       chartInstance.current?.unsubscribeClick(handleChartClick);
       chartInstance.current?.remove();
     };
-  }, [chartRef, chartInstance, chartValues, markers]);
+  }, [chartRef, chartInstance, bg, text, border, up, down, chartValues, markers]);
 
   return <Box ref={chartRef} w="full" h="full" />;
 };

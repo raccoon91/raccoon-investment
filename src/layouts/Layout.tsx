@@ -1,21 +1,30 @@
 import { useCallback, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Box, Center, Flex, HStack, IconButton, Spinner, Switch, Text, VStack } from "@chakra-ui/react";
-import { ChevronRightIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Center,
+  Flex,
+  HStack,
+  Icon,
+  IconButton,
+  Spinner,
+  Switch,
+  Text,
+  VStack,
+  useColorMode,
+} from "@chakra-ui/react";
+import { LogOut } from "react-feather";
 import { Sidebar } from "./Sidebar";
 import { useGlobalStore, useUserStore } from "../stores";
 
 export const Layout = () => {
   const navigate = useNavigate();
+  const { colorMode, toggleColorMode } = useColorMode();
   const isLoad = useGlobalStore(state => state.isLoad);
   const { user, getUser, signout } = useUserStore(state => ({
     user: state.user,
     getUser: state.getUser,
     signout: state.signout,
-  }));
-  const { mode, toggleMode } = useGlobalStore(state => ({
-    mode: state.mode,
-    toggleMode: state.toggleMode,
   }));
 
   const checkSignin = useCallback(async () => {
@@ -40,36 +49,30 @@ export const Layout = () => {
     }
   };
 
-  const handleChangeThemeMode = () => {
-    toggleMode();
-  };
-
   if (!user) return null;
 
   return (
-    <Flex overflow="hidden" w="100vw" h="100vh">
-      <Box flex="0 0 60px" w="60px" py="48px" borderRight="1px solid" borderColor="gray.700" boxSizing="content-box">
-        <Sidebar />
-      </Box>
+    <Flex w="100vw" h="100vh">
+      <Sidebar />
 
-      <VStack flex="1" align="stretch">
+      <VStack flex="1" spacing="0px" align="stretch">
         <HStack
           h="48px"
+          px="36px"
           flex="0 0 48px"
-          px="48px"
           borderBottom="1px solid"
-          borderColor="gray.700"
+          borderColor="border"
           justify="space-between"
         >
+          <Text>{user?.email ?? ""}</Text>
+
           <HStack spacing="24px">
-            <Text>{user?.email ?? ""}</Text>
+            <Switch isChecked={colorMode === "dark"} onChange={toggleColorMode} />
 
             {user && (
-              <IconButton aria-label="logout" icon={<ChevronRightIcon boxSize="16px" />} onClick={handleSignOut} />
+              <IconButton aria-label="logout" variant="ghost" icon={<Icon as={LogOut} />} onClick={handleSignOut} />
             )}
           </HStack>
-
-          <Switch isChecked={mode === "dark"} onChange={handleChangeThemeMode} />
         </HStack>
 
         <Box overflow="hidden" position="relative" flex="1" p="30px">
