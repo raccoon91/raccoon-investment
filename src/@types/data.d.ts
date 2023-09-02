@@ -1,3 +1,21 @@
+type ISymbolData = Supabase["public"]["Tables"]["symbols"]["Row"];
+
+type IGroupData = {
+  id: number;
+  name: string;
+  order: number | null;
+  favorites: {
+    id: number;
+    order: number | null;
+    symbols: {
+      id: number;
+      name: string;
+      ticker: string;
+      type: string;
+    } | null;
+  }[];
+};
+
 type ICandleChartData = {
   id: number;
   time: string;

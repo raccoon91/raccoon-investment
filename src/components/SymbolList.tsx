@@ -3,7 +3,7 @@ import { Card, CardBody, CardHeader, HStack, Icon, IconButton, Tag, Text, Wrap }
 import { Star } from "react-feather";
 
 interface ISymbolListProps {
-  symbolList: Supabase["public"]["Tables"]["symbols"]["Row"][] | null;
+  symbolList: ISymbolData[] | null;
   favoriteMap: Record<number, any>;
   onClickFavorite?: MouseEventHandler<HTMLButtonElement>;
 }
