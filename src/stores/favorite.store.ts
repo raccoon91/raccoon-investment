@@ -4,24 +4,8 @@ import { useGlobalStore } from "./global.store";
 import { useUserStore } from "./user.store";
 import { supabase } from "../db";
 
-type IGroup = {
-  id: number;
-  name: string;
-  order: number | null;
-  favorites: {
-    id: number;
-    order: number | null;
-    symbols: {
-      id: number;
-      name: string;
-      ticker: string;
-      type: string;
-    } | null;
-  }[];
-};
-
 interface IFavoriteStore {
-  groupList: IGroup[];
+  groupList: IGroupData[];
   favoriteMap: Record<number, { id: number; order: number | null; group_id: number | null; symbol_id: number }>;
   getGroupData: () => Promise<void>;
   getFavoriteMap: () => Promise<void>;
