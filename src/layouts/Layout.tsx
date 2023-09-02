@@ -12,6 +12,7 @@ import {
   Text,
   VStack,
   useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { LogOut } from "react-feather";
 import { Sidebar } from "./Sidebar";
@@ -21,6 +22,7 @@ export const Layout = () => {
   const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode();
   const isLoad = useGlobalStore(state => state.isLoad);
+  const primary = useColorModeValue("teal.500", "teal.300");
   const { user, getUser, signout } = useUserStore(state => ({
     user: state.user,
     getUser: state.getUser,
@@ -77,8 +79,8 @@ export const Layout = () => {
 
         <Box overflow="hidden" position="relative" flex="1" p="30px">
           {isLoad && (
-            <Center position="absolute" top="0" left="0" w="100%" h="100%">
-              <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+            <Center position="absolute" top="0" left="0" w="100%" h="100%" zIndex="10">
+              <Spinner thickness="4px" speed="0.65s" emptyColor="border" color={primary} size="xl" />
             </Center>
           )}
 
