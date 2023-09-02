@@ -1,7 +1,24 @@
-import { useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Center, HStack, Icon, IconButton, Tag, Text, VStack } from "@chakra-ui/react";
-import { DownloadCloud, Settings } from "react-feather";
+import {
+  Box,
+  Center,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  HStack,
+  Heading,
+  Icon,
+  IconButton,
+  Tag,
+  Text,
+  Textarea,
+  VStack,
+} from "@chakra-ui/react";
+import { DownloadCloud, Plus, Save, Settings } from "react-feather";
 import { Chart } from "../components";
 import { useChartStore, useMarkerStore } from "../stores";
 
@@ -47,46 +64,55 @@ export const ChartPage = () => {
     setIsOpenDrawer(true);
   };
 
-  // const handleCloseDrawer = () => {
-  //   setIsOpenDrawer(false);
-  // };
+  const handleCloseDrawer = () => {
+    setIsOpenDrawer(false);
+  };
 
-  // const handleAddMarker = () => {
-  //   addMarker(params?.symbolId);
-  // };
+  const handleAddMarker = () => {
+    addMarker(params?.symbolId);
+  };
 
-  // const handleChangeMarker: ChangeEventHandler<HTMLTextAreaElement> = e => {
-  //   changeMarker(e.target.value);
-  // };
+  const handleChangeMarker = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    changeMarker(e.target.value);
+  };
 
-  // const handleSaveMarker = async () => {
-  //   await saveMarkerData();
-  //   await getMarkerData(params?.symbolId);
-  // };
+  const handleSaveMarker = async () => {
+    await saveMarkerData();
+    await getMarkerData(params?.symbolId);
+  };
 
   return (
     <>
-      {/* <Drawer anchor="right" open={isOpenDrawer} onClose={handleCloseDrawer}>
-        <VStack gap="24px" w="36px" p="12px 24px">
-          <HStack justify="space-between">
-            <Text>Dividen</Text>
+      <Drawer size="sm" placement="right" onClose={handleCloseDrawer} isOpen={isOpenDrawer}>
+        <DrawerOverlay />
 
-            <Button>
-              <StarIcon onClick={handleAddMarker} />
-            </Button>
-          </HStack>
+        <DrawerContent>
+          <DrawerHeader borderBottomWidth="1px">{symbol?.name}</DrawerHeader>
 
-          <Box height="360px">
-            <Textarea value={markerJson} onChange={handleChangeMarker} />
-          </Box>
+          <DrawerBody>
+            <Flex direction="column" gap="16px">
+              <HStack justify="space-between">
+                <Heading as="h5" fontSize="16px">
+                  Dividen
+                </Heading>
 
-          <Box textAlign="right">
-            <Button variant="contained" color="success">
-              <StarIcon onClick={handleSaveMarker} />
-            </Button>
-          </Box>
-        </VStack>
-      </Drawer> */}
+                <IconButton
+                  variant="ghost"
+                  aria-label="add dividen"
+                  icon={<Icon as={Plus} />}
+                  onClick={handleAddMarker}
+                />
+              </HStack>
+
+              <Textarea h="300px" resize="none" value={markerJson} onChange={handleChangeMarker} />
+
+              <Box textAlign="right">
+                <IconButton aria-label="save dividen" icon={<Icon as={Save} />} onClick={handleSaveMarker} />
+              </Box>
+            </Flex>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
 
       <VStack overflow="auto" gap="24px" align="stretch" w="full" h="full">
         <HStack>

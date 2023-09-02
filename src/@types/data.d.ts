@@ -8,7 +8,7 @@ type ICandleChartData = {
 };
 
 type IMarkerData = {
-  id: number;
+  id: string;
   time: string;
   position: "aboveBar" | "belowBar" | "inBar";
   color: string;

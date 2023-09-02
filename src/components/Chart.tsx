@@ -43,7 +43,7 @@ export const Chart: FC<IChartProps> = ({ chartValues, markers }) => {
     });
 
     candlestickSeries.setData(chartValues);
-    // candlestickSeries.setMarkers(markers);
+    candlestickSeries.setMarkers(markers);
 
     chartInstance.current.timeScale().fitContent();
     chartInstance.current.subscribeClick(handleChartClick);

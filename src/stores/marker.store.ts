@@ -21,7 +21,7 @@ export const useMarkerStore = create<IMarkerStore>((set, get) => ({
     const markers = get().markers;
 
     markers.unshift({
-      id: Number(symbolId),
+      id: symbolId,
       time: dayjs().format("YYYY-MM-DD"),
       position: "aboveBar",
       color: "#388E3C",
@@ -44,7 +44,7 @@ export const useMarkerStore = create<IMarkerStore>((set, get) => ({
     try {
       if (!symbolId) return;
 
-      const markerData = await db.markers.where({ id: Number(symbolId) }).toArray();
+      const markerData = await db.markers.where({ id: symbolId }).toArray();
       const sortedMarkerData = sortBy(markerData, "time");
 
       set({ markers: sortedMarkerData, markerJson: JSON.stringify(sortedMarkerData, null, 4) });
@@ -55,7 +55,7 @@ export const useMarkerStore = create<IMarkerStore>((set, get) => ({
   saveMarkerData: async () => {
     try {
       const markerJson = get().markerJson;
-      const markers = JSON.parse(markerJson);
+      const markers: IMarkerData[] = JSON.parse(markerJson);
 
       await db.markers.bulkPut(markers);
 
