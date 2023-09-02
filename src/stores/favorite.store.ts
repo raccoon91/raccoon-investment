@@ -82,18 +82,21 @@ export const useFavoriteStore = create<IFavoriteStore>(set => ({
     try {
       if (!symbolId) return;
 
-      const { data: favorite } = await supabase.from("favorites").select("*").eq("symbol_id", symbolId);
+      const { data } = await supabase.from("favorites").select("*").eq("symbol_id", symbolId).maybeSingle();
 
-      if (favorite?.length) {
+      if (data) {
         await supabase.from("favorites").delete().eq("symbol_id", symbolId);
       } else {
         const user = useUserStore.getState().user;
 
         if (!user?.id) return;
 
+        const { data: group } = await supabase.from("groups").select("*").eq("name", "None").maybeSingle();
+
         await supabase.from("favorites").insert({
           symbol_id: Number(symbolId),
           user_id: user.id,
+          group_id: group?.id ?? null,
         });
       }
     } catch (err) {

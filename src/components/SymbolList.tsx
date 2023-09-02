@@ -1,9 +1,6 @@
 import { FC, MouseEventHandler, memo } from "react";
-import { Link } from "react-router-dom";
 import { Card, CardBody, CardHeader, HStack, Icon, IconButton, Tag, Text, Wrap } from "@chakra-ui/react";
 import { Star } from "react-feather";
-
-// import { StarIcon } from "@chakra-ui/icons";
 
 interface ISymbolListProps {
   symbolList: Supabase["public"]["Tables"]["symbols"]["Row"][] | null;
@@ -21,9 +18,9 @@ export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, favoriteMap,
               <Tag borderRadius="full">{symbol.ticker}</Tag>
 
               <HStack spacing="8px">
-                <Tag>{symbol.exchange}</Tag>
-                <Tag>{symbol.mic_code}</Tag>
-                <Tag>{symbol.currency}</Tag>
+                <Tag variant="outline">{symbol.exchange}</Tag>
+                <Tag variant="outline">{symbol.mic_code}</Tag>
+                <Tag variant="outline">{symbol.currency}</Tag>
               </HStack>
 
               {onClickFavorite && (
@@ -41,9 +38,7 @@ export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, favoriteMap,
           </CardHeader>
 
           <CardBody>
-            <Text as={Link} to={`/charts/${symbol.id}`} _hover={{ textDecoration: "underline" }}>
-              {symbol.name}
-            </Text>
+            <Text>{symbol.name}</Text>
           </CardBody>
         </Card>
       ))}

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Box, Card, CardBody, CardHeader, Flex, Heading, Tag, Text, Wrap } from "@chakra-ui/react";
 import { useFavoriteStore } from "../stores";
 
@@ -24,14 +25,24 @@ export const HomePage = () => {
             </CardHeader>
 
             <CardBody>
-              {group.favorites.map(favorite => (
-                <Flex key={favorite.id}>
-                  <Box w="100px">
-                    <Tag>{favorite.symbols?.ticker}</Tag>
-                  </Box>
-                  <Text>{favorite.symbols?.name}</Text>
-                </Flex>
-              ))}
+              <Flex direction="column" gap="24px">
+                {group.favorites.map(favorite => (
+                  <Flex key={favorite.id} gap="12px">
+                    <Box w="80px">
+                      <Tag>{favorite.symbols?.ticker}</Tag>
+                    </Box>
+
+                    <Text
+                      as={Link}
+                      to={`/charts/${favorite.symbols?.id}`}
+                      textDecoration="none"
+                      _hover={{ textDecoration: "underline" }}
+                    >
+                      {favorite.symbols?.name}
+                    </Text>
+                  </Flex>
+                ))}
+              </Flex>
             </CardBody>
           </Card>
         ))}

@@ -1,6 +1,6 @@
-import { MouseEventHandler, useEffect } from "react";
+import { MouseEvent, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Box, Card, CardBody, CardHeader, HStack, Heading, Icon, IconButton, Tag, Text, Wrap } from "@chakra-ui/react";
+import { Box, Card, CardBody, CardHeader, Center, Flex, Heading, Icon, Tag, Text, Wrap } from "@chakra-ui/react";
 import { X } from "react-feather";
 import { useFavoriteStore } from "../stores";
 
@@ -15,7 +15,7 @@ export const FavoritePage = () => {
     getGroupData();
   }, []);
 
-  const handleDeleteFavorite: MouseEventHandler<HTMLButtonElement> = async e => {
+  const handleDeleteFavorite = async (e: MouseEvent<HTMLDivElement>) => {
     const favoriteId = e.currentTarget.dataset["favoriteId"];
 
     if (!favoriteId) return;
@@ -36,33 +36,28 @@ export const FavoritePage = () => {
             </CardHeader>
 
             <CardBody>
-              {group.favorites.map(favorite => (
-                <HStack key={favorite.id} gap="32px">
-                  <Box minW="100px">
-                    <Tag>{favorite.symbols?.ticker}</Tag>
-                  </Box>
+              <Flex direction="column" gap="24px">
+                {group.favorites.map(favorite => (
+                  <Flex key={favorite.id} gap="12px">
+                    <Box minW="80px">
+                      <Tag>{favorite.symbols?.ticker}</Tag>
+                    </Box>
 
-                  <Text
-                    as={Link}
-                    to={`/charts/${favorite.symbols?.id}`}
-                    textDecoration="none"
-                    _hover={{ textDecoration: "underline" }}
-                  >
-                    {favorite.symbols?.name}
-                  </Text>
+                    <Text
+                      as={Link}
+                      to={`/charts/${favorite.symbols?.id}`}
+                      textDecoration="none"
+                      _hover={{ textDecoration: "underline" }}
+                    >
+                      {favorite.symbols?.name}
+                    </Text>
 
-                  <IconButton
-                    variant="none"
-                    w="24px"
-                    h="24px"
-                    color="text"
-                    aria-label="favorit"
-                    icon={<Icon as={X} />}
-                    data-favorite-id={favorite.id}
-                    onClick={handleDeleteFavorite}
-                  />
-                </HStack>
-              ))}
+                    <Center ml="auto" cursor="pointer" data-favorite-id={favorite.id} onClick={handleDeleteFavorite}>
+                      <Icon as={X} boxSize="24px" />
+                    </Center>
+                  </Flex>
+                ))}
+              </Flex>
             </CardBody>
           </Card>
         ))}
