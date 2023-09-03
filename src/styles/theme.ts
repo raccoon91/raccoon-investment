@@ -76,6 +76,26 @@ export const theme = extendTheme(
           },
         },
       },
+      Select: {
+        baseStyle: {
+          field: {
+            _light: {
+              _focusVisible: {
+                border: "2px solid",
+                borderColor: "teal.500",
+                boxShadow: "none",
+              },
+            },
+            _dark: {
+              _focusVisible: {
+                border: "2px solid",
+                borderColor: "teal.300",
+                boxShadow: "none",
+              },
+            },
+          },
+        },
+      },
     },
   },
   withDefaultColorScheme({
