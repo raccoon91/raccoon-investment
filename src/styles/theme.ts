@@ -17,6 +17,30 @@ export const theme = extendTheme(
         },
       },
     },
+    styles: {
+      global: {
+        "*": {
+          "&::-webkit-scrollbar": {
+            width: "4px",
+          },
+          "&::-webkit-scrollbar-track": {
+            width: "6px",
+          },
+          _light: {
+            "&::-webkit-scrollbar-thumb": {
+              background: "gray.200",
+              borderRadius: "3px",
+            },
+          },
+          _dark: {
+            "&::-webkit-scrollbar-thumb": {
+              background: "whiteAlpha.400",
+              borderRadius: "3px",
+            },
+          },
+        },
+      },
+    },
     components: {
       Card: {
         baseStyle: {
