@@ -19,8 +19,14 @@ export const FavoritePage = () => {
     getGroupData();
   }, []);
 
-  const handleChangeFavoriteList = (callback: (groupList: IGroupData[] | null) => IGroupData[] | null | undefined) => {
-    setCopyGroupList(callback(copyGroupList) ?? null);
+  const handleChangeFavoriteList = (
+    callbackOrValue: IGroupData[] | ((groupList: IGroupData[] | null) => IGroupData[] | null | undefined)
+  ) => {
+    if (typeof callbackOrValue === "function") {
+      setCopyGroupList(callbackOrValue(copyGroupList) ?? null);
+    } else {
+      setCopyGroupList(callbackOrValue);
+    }
   };
 
   const handleSaveGroupList = async () => {

@@ -60,7 +60,11 @@ export const useFavoriteStore = create<IFavoriteStore>((set, get) => ({
       const groupList = get().groupList;
       const copyGroupList = get().copyGroupList;
 
-      const groups = differenceWith(copyGroupList ?? [], groupList ?? [], (a, b) => a.order === b.order);
+      const groups = differenceWith(
+        copyGroupList ?? [],
+        groupList ?? [],
+        (a, b) => a.id === b.id && a.order === b.order
+      );
       const favorites = differenceWith(
         flatMap(copyGroupList ?? [], group => group.favorites),
         flatMap(groupList ?? [], group => group.favorites),
