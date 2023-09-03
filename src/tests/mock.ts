@@ -49,9 +49,21 @@ export const stockReturnMocks: Mock = [
   },
 ];
 
+/*
+  bp: 154.83
+  sp: 155.77
+  nox: 5
+  bcp: 0.1
+  scp: 0.1
+
+  cp: 1.54
+  ttp: 0.02
+  pal: 3.14
+*/
+
 export const stockReturnWithTaxMocks: Mock = [
   {
-    params: { bp: 1000, sp: 1000, nos: 10, bcp: 0.1, scp: 0.1, ttp: 0.2 },
+    params: { bp: 1000, sp: 1000, nos: 10, bcp: 0.1, scp: 0.1 },
     result: {
       buyingCommission: 10,
       sellingCommission: 10,
@@ -61,7 +73,7 @@ export const stockReturnWithTaxMocks: Mock = [
     },
   },
   {
-    params: { bp: 1000, sp: 900, nos: 10, bcp: 0.1, scp: 0.1, ttp: 0.2 },
+    params: { bp: 1000, sp: 900, nos: 10, bcp: 0.1, scp: 0.1 },
     result: {
       buyingCommission: 10,
       sellingCommission: 9,
@@ -71,7 +83,7 @@ export const stockReturnWithTaxMocks: Mock = [
     },
   },
   {
-    params: { bp: 1000, sp: 1100, nos: 10, bcp: 0.1, scp: 0.1, ttp: 0.2 },
+    params: { bp: 1000, sp: 1100, nos: 10, bcp: 0.1, scp: 0.1 },
     result: {
       buyingCommission: 10,
       sellingCommission: 11,

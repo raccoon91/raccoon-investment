@@ -28,7 +28,7 @@ export const Sidebar = () => {
         </NavIcon>
       </VStack>
 
-      <NavIcon to="/calculators" label="Calculator">
+      <NavIcon to="/calculates" label="Calculate">
         <Icon as={DivideSquare} boxSize="18px" />
       </NavIcon>
     </VStack>
