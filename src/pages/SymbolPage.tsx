@@ -22,8 +22,8 @@ export const SymbolPage = () => {
     })
   );
 
-  const handleChangeColumn = (e: ChangeEvent<HTMLSelectElement>) => {
-    changeColumn(e.target.value);
+  const handleChangeColumn = (value: "ticker" | "name") => {
+    changeColumn(value);
   };
 
   const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
