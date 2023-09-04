@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { sortBy } from "lodash-es";
+import { cloneDeep, sortBy } from "lodash-es";
 import { create } from "zustand";
 import { db } from "../db";
 
@@ -18,18 +18,17 @@ export const useMarkerStore = create<IMarkerStore>((set, get) => ({
   addMarker: (symbolId?: string) => {
     if (!symbolId) return;
 
-    const markers = get().markers;
+    const markers = cloneDeep(get().markers ?? []);
 
     markers.unshift({
       id: symbolId,
       time: dayjs().format("YYYY-MM-DD"),
       position: "aboveBar",
-      color: "#388E3C",
-      shape: "arrowDown",
+      shape: "circle",
       text: "dividen",
     });
 
-    set({ markers, markerJson: JSON.stringify(markers, null, 4) });
+    set({ markerJson: JSON.stringify(markers, null, 4) });
   },
   changeMarker: (value?: string) => {
     try {

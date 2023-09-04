@@ -35,11 +35,21 @@ type ICandleChartData = {
   close: number;
 };
 
+type ITradeData = {
+  id: string;
+  time: string;
+  type: "buy" | "sell";
+  price: string;
+  count: string;
+  position: "aboveBar" | "belowBar" | "inBar";
+  shape: "circle" | "arrowDown" | "square" | "arrowUp";
+  text: string;
+};
+
 type IMarkerData = {
   id: string;
   time: string;
   position: "aboveBar" | "belowBar" | "inBar";
-  color: string;
   shape: "circle" | "arrowDown" | "square" | "arrowUp";
-  text: "dividen";
+  text: string;
 };

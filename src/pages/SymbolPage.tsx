@@ -56,7 +56,12 @@ export const SymbolPage = () => {
           onSubmit={handleSearchSearch}
         />
 
-        <IconButton aria-label="sync database" icon={<Icon as={DownloadCloud} />} onClick={syncSymbolData} />
+        <IconButton
+          aria-label="sync database"
+          colorScheme="blue"
+          icon={<Icon as={DownloadCloud} />}
+          onClick={syncSymbolData}
+        />
       </HStack>
 
       <SymbolList symbolList={symbolList} favoriteMap={favoriteMap} onClickFavorite={handleClickFavorite} />
