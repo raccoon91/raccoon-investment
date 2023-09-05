@@ -6,16 +6,16 @@ import { db } from "../db";
 interface IMarkerStore {
   markers: IMarkerData[];
   markerJson: string;
-  addMarker: (symbolId?: string) => void;
+  addMarker: (symbolId?: string | null) => void;
   changeMarker: (value?: string) => void;
-  getMarkerData: (symbolId?: string) => Promise<void>;
+  getMarkerData: (symbolId?: string | null) => Promise<void>;
   saveMarkerData: () => Promise<void>;
 }
 
 export const useMarkerStore = create<IMarkerStore>((set, get) => ({
   markers: [],
   markerJson: "",
-  addMarker: (symbolId?: string) => {
+  addMarker: (symbolId?: string | null) => {
     if (!symbolId) return;
 
     const markers = cloneDeep(get().markers ?? []);
@@ -39,7 +39,7 @@ export const useMarkerStore = create<IMarkerStore>((set, get) => ({
       console.error(err);
     }
   },
-  getMarkerData: async (symbolId?: string) => {
+  getMarkerData: async (symbolId?: string | null) => {
     try {
       if (!symbolId) return;
 

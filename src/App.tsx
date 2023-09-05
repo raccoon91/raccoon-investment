@@ -13,8 +13,8 @@ export const App = () => {
             <Route index element={<HomePage />} />
             <Route path="symbols" element={<SymbolPage />} />
             <Route path="favorites" element={<FavoritePage />} />
+            <Route path="charts" element={<ChartPage />} />
             <Route path="calculates" element={<CalculatePage />} />
-            <Route path="charts/:symbolId" element={<ChartPage />} />
           </Route>
 
           <Route path="signin" element={<SignInPage />} />

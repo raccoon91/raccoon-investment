@@ -6,16 +6,16 @@ import { db } from "../db";
 interface ITradeStore {
   trades: ITradeData[];
   tradeJson: string;
-  addTrade: (symbolId?: string, type?: "buy" | "sell", price?: string) => void;
+  addTrade: (symbolId?: string | null, type?: "buy" | "sell", price?: string) => void;
   changeTrade: (value?: string) => void;
-  getTradeData: (symbolId?: string) => Promise<void>;
+  getTradeData: (symbolId?: string | null) => Promise<void>;
   saveTradeData: () => Promise<void>;
 }
 
 export const useTradeStore = create<ITradeStore>((set, get) => ({
   trades: [],
   tradeJson: "",
-  addTrade: (symbolId?: string, type?: "buy" | "sell") => {
+  addTrade: (symbolId?: string | null, type?: "buy" | "sell") => {
     if (!symbolId || !type) return;
 
     const trades = cloneDeep(get().trades ?? []);
@@ -42,7 +42,7 @@ export const useTradeStore = create<ITradeStore>((set, get) => ({
       console.error(err);
     }
   },
-  getTradeData: async (symbolId?: string) => {
+  getTradeData: async (symbolId?: string | null) => {
     try {
       if (!symbolId) return;
 

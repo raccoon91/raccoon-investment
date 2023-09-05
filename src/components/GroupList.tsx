@@ -333,7 +333,7 @@ export const GroupList: FC<IGroupListProps> = ({ groupList = [], onChageGroupLis
                               w="200px"
                               textDecoration="none"
                               _hover={{ textDecoration: "underline" }}
-                              to={`/charts/${favorite.symbols?.id}`}
+                              to={`/charts?symboldId=${favorite.symbols?.id}`}
                             >
                               {favorite.symbols?.name}
                             </Text>

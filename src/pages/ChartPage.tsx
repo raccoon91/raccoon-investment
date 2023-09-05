@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -14,17 +14,26 @@ import {
   Heading,
   Icon,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Tag,
   Text,
   Textarea,
   VStack,
 } from "@chakra-ui/react";
-import { Bookmark, DollarSign, DownloadCloud, Plus, Save } from "react-feather";
+import { Bookmark, ChevronDown, DollarSign, DownloadCloud, Plus, Save } from "react-feather";
 import { Chart } from "../components";
-import { useChartStore, useMarkerStore, useTradeStore } from "../stores";
+import { useChartStore, useFavoriteStore, useMarkerStore, useTradeStore } from "../stores";
 
 export const ChartPage = () => {
-  const params = useParams();
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+  const { favoriteList, getFavoriteList } = useFavoriteStore(state => ({
+    favoriteList: state.favoriteList,
+    getFavoriteList: state.getFavoriteList,
+  }));
   const { symbol, chartValues, getChartData, syncChartData, clearChartData } = useChartStore(state => ({
     symbol: state.symbol,
     chartValues: state.chartValues,
@@ -54,11 +63,13 @@ export const ChartPage = () => {
   const isEmpty = useMemo(() => !!chartValues && chartValues.length === 0, [chartValues]);
 
   useEffect(() => {
-    if (!params?.symbolId) return;
+    getFavoriteList();
 
-    getChartData(params?.symbolId);
-    getTradeData(params?.symbolId);
-    getMarkerData(params?.symbolId);
+    if (!params.get("symbolId")) return;
+
+    getChartData(params.get("symbolId"));
+    getTradeData(params.get("symbolId"));
+    getMarkerData(params.get("symbolId"));
 
     return () => {
       clearChartData();
@@ -66,9 +77,9 @@ export const ChartPage = () => {
   }, [params]);
 
   const handleClickSyncChartData = async () => {
-    if (!params?.symbolId) return;
+    if (!params.get("symbolId")) return;
 
-    await syncChartData(params?.symbolId);
+    await syncChartData(params.get("symbolId"));
   };
 
   const handleOpenTradeDrawer = () => {
@@ -88,11 +99,11 @@ export const ChartPage = () => {
   };
 
   const handleAddBuy = () => {
-    addTrade(params?.symbolId, "buy");
+    addTrade(params.get("symbolId"), "buy");
   };
 
   const handleAddSell = () => {
-    addTrade(params?.symbolId, "sell");
+    addTrade(params.get("symbolId"), "sell");
   };
 
   const handleChangeTrade = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -101,11 +112,11 @@ export const ChartPage = () => {
 
   const handleSaveTrade = async () => {
     await saveTradeData();
-    await getTradeData(params?.symbolId);
+    await getTradeData(params.get("symbolId"));
   };
 
   const handleAddMarker = () => {
-    addMarker(params?.symbolId);
+    addMarker(params.get("symbolId"));
   };
 
   const handleChangeMarker = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -114,7 +125,11 @@ export const ChartPage = () => {
 
   const handleSaveMarker = async () => {
     await saveMarkerData();
-    await getMarkerData(params?.symbolId);
+    await getMarkerData(params.get("symbolId"));
+  };
+
+  const handleSelectSymbol = (symbolId?: number) => () => {
+    navigate(`/charts?symbolId=${symbolId}`);
   };
 
   return (
@@ -184,12 +199,29 @@ export const ChartPage = () => {
 
       <VStack overflow="auto" gap="24px" align="stretch" w="full" h="full">
         <HStack>
-          {symbol && (
-            <HStack gap="24px">
-              <Tag>{symbol?.ticker}</Tag>
-              <Text>{symbol?.name}</Text>
-            </HStack>
-          )}
+          <HStack gap="16px">
+            <Tag>{symbol?.ticker ?? "NONE"}</Tag>
+
+            <Menu>
+              <MenuButton
+                as={Button}
+                size="sm"
+                rightIcon={<ChevronDown />}
+                variant="ghost"
+                colorScheme="gray"
+                value={symbol?.name}
+              >
+                {symbol ? symbol?.name?.toUpperCase() : "Select symbol"}
+              </MenuButton>
+              <MenuList zIndex="10">
+                {favoriteList.map(favorite => (
+                  <MenuItem key={favorite.id} onClick={handleSelectSymbol(favorite.symbols?.id)}>
+                    {favorite.symbols?.name}
+                  </MenuItem>
+                ))}
+              </MenuList>
+            </Menu>
+          </HStack>
 
           <IconButton
             ml="auto"

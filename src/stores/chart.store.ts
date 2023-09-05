@@ -9,15 +9,15 @@ type IChartInterval = "1min" | "5min" | "15min" | "30min" | "45min" | "1h" | "2h
 interface IChartStore {
   symbol: ISymbolData | null;
   chartValues?: ICandleChartData[] | null;
-  getChartData: (symbolId?: string, interval?: IChartInterval) => Promise<void>;
-  syncChartData: (symbolId?: string, interval?: IChartInterval) => Promise<void>;
+  getChartData: (symbolId?: string | null, interval?: IChartInterval) => Promise<void>;
+  syncChartData: (symbolId?: string | null, interval?: IChartInterval) => Promise<void>;
   clearChartData: () => void;
 }
 
 export const useChartStore = create<IChartStore>(set => ({
   symbol: null,
   chartValues: null,
-  getChartData: async (symbolId?: string) => {
+  getChartData: async (symbolId?: string | null) => {
     try {
       if (!symbolId) return;
 
@@ -35,7 +35,7 @@ export const useChartStore = create<IChartStore>(set => ({
       useGlobalStore.getState().setIsLoad(false);
     }
   },
-  syncChartData: async (symbolId?: string, interval = "1week") => {
+  syncChartData: async (symbolId?: string | null, interval = "1week") => {
     try {
       if (!symbolId) return;
 

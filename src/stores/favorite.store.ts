@@ -8,8 +8,10 @@ interface IFavoriteStore {
   groupList: IGroupData[] | null;
   copyGroupList: IGroupData[] | null;
   favoriteMap: Record<number, { id: number; order: number | null; group_id: number | null; symbol_id: number }>;
+  favoriteList: IFavoriteData[];
   getGroupData: () => Promise<void>;
   getFavoriteMap: () => Promise<void>;
+  getFavoriteList: () => Promise<void>;
   setCopyGroupList: (groupList: IGroupData[] | null) => void;
   saveGroupListOrder: () => Promise<void>;
   deleteFavorite: (favoriteId?: string) => Promise<void>;
@@ -19,6 +21,7 @@ interface IFavoriteStore {
 export const useFavoriteStore = create<IFavoriteStore>((set, get) => ({
   groupList: [],
   favoriteMap: {},
+  favoriteList: [],
   copyGroupList: [],
   getGroupData: async () => {
     try {
@@ -44,6 +47,19 @@ export const useFavoriteStore = create<IFavoriteStore>((set, get) => ({
       const { data } = await supabase.from("favorites").select("*");
 
       set({ favoriteMap: keyBy(data ?? [], "symbol_id") });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      useGlobalStore.getState().setIsLoad(false);
+    }
+  },
+  getFavoriteList: async () => {
+    try {
+      useGlobalStore.getState().setIsLoad(true);
+
+      const { data } = await supabase.from("favorites").select(`*, symbols ( * )`).order("order");
+
+      set({ favoriteList: data ?? [] });
     } catch (err) {
       console.error(err);
     } finally {
