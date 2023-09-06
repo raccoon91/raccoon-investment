@@ -28,8 +28,8 @@ import { Chart } from "../components";
 import { useChartStore, useFavoriteStore, useMarkerStore, useTradeStore } from "../stores";
 
 export const ChartPage = () => {
-  const [params] = useSearchParams();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
   const { favoriteList, getFavoriteList } = useFavoriteStore(state => ({
     favoriteList: state.favoriteList,
     getFavoriteList: state.getFavoriteList,
@@ -65,7 +65,7 @@ export const ChartPage = () => {
   useEffect(() => {
     getFavoriteList();
 
-    if (!params.get("symbolId")) return;
+    if (!params.has("symbolId")) return;
 
     getChartData(params.get("symbolId"));
     getTradeData(params.get("symbolId"));
@@ -77,7 +77,7 @@ export const ChartPage = () => {
   }, [params]);
 
   const handleClickSyncChartData = async () => {
-    if (!params.get("symbolId")) return;
+    if (!params.has("symbolId")) return;
 
     await syncChartData(params.get("symbolId"));
   };

@@ -10,14 +10,14 @@ export const SymbolPage = () => {
     toggleFavorite: state.toggleFavorite,
     getFavoriteMap: state.getFavoriteMap,
   }));
-  const { column, search, symbolList, changeColumn, changeSearch, getSymbolData, syncSymbolData } = useSymbolStore(
+  const { column, search, symbolList, changeColumn, changeSearch, searchSymbolData, syncSymbolData } = useSymbolStore(
     state => ({
       column: state.column,
       search: state.search,
       symbolList: state.symbolList,
       changeColumn: state.changeColumn,
       changeSearch: state.changeSearch,
-      getSymbolData: state.getSymbolData,
+      searchSymbolData: state.searchSymbolData,
       syncSymbolData: state.syncSymbolData,
     })
   );
@@ -33,7 +33,7 @@ export const SymbolPage = () => {
   const handleSearchSearch = async (e: FormEvent<HTMLDivElement>) => {
     e.preventDefault();
 
-    await getSymbolData();
+    await searchSymbolData();
   };
 
   const handleClickFavorite: MouseEventHandler<HTMLButtonElement> = async e => {

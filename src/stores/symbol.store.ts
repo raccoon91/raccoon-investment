@@ -6,16 +6,19 @@ import { supabase } from "../db";
 interface ISymbolStore {
   column: string;
   search: string;
+  symbol: ISymbolData | null;
   symbolList: ISymbolData[] | null;
   changeColumn: (value?: string) => void;
   changeSearch: (value?: string) => void;
-  getSymbolData: () => Promise<void>;
+  getSymbolData: (symbolId?: string | null) => Promise<void>;
+  searchSymbolData: () => Promise<void>;
   syncSymbolData: () => Promise<void>;
 }
 
 export const useSymbolStore = create<ISymbolStore>((set, get) => ({
   column: "ticker",
   search: "",
+  symbol: null,
   symbolList: null,
   changeColumn: (value?: string) => {
     set({ column: value });
@@ -23,7 +26,26 @@ export const useSymbolStore = create<ISymbolStore>((set, get) => ({
   changeSearch: (value?: string) => {
     set({ search: value });
   },
-  getSymbolData: async () => {
+  getSymbolData: async (symbolId?: string | null) => {
+    try {
+      if (!symbolId) {
+        set({ symbol: null });
+
+        return;
+      }
+
+      useGlobalStore.getState().setIsLoad(true);
+
+      const { data } = await supabase.from("symbols").select("*").eq("id", symbolId).maybeSingle();
+
+      set({ symbol: data ?? null });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      useGlobalStore.getState().setIsLoad(false);
+    }
+  },
+  searchSymbolData: async () => {
     try {
       const column = get().column;
       const search = get().search;

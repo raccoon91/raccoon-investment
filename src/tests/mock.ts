@@ -1,12 +1,12 @@
 import { ArgumentsType } from "vitest";
-import { CalculateStockReturn } from "../utils";
+import { CalculateProfitAndLoss } from "../utils";
 
 type Mock = {
-  params: ArgumentsType<CalculateStockReturn>[0];
-  result: ReturnType<CalculateStockReturn>;
+  params: ArgumentsType<CalculateProfitAndLoss>[0];
+  result: ReturnType<CalculateProfitAndLoss>;
 }[];
 
-export const stockReturnExceptionMocks: Mock = [
+export const profitAndLossExceptionMocks: Mock = [
   { params: {}, result: null },
   { params: { bp: 1000 }, result: null },
   { params: { bp: 1000, sp: 1000 }, result: null },
@@ -16,7 +16,7 @@ export const stockReturnExceptionMocks: Mock = [
   { params: { bp: -1000, sp: -1000, nos: 10 }, result: null },
 ];
 
-export const stockReturnMocks: Mock = [
+export const profitAndLossMocks: Mock = [
   {
     params: { bp: 1000, sp: 1000, nos: 10 },
     result: {
@@ -61,7 +61,7 @@ export const stockReturnMocks: Mock = [
   pal: 3.14
 */
 
-export const stockReturnWithTaxMocks: Mock = [
+export const profitAndLossWithTaxMocks: Mock = [
   {
     params: { bp: 1000, sp: 1000, nos: 10, bcp: 0.1, scp: 0.1 },
     result: {

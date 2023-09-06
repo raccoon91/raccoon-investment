@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Box, Button, Flex, FormControl, FormLabel, Input, Text, VStack } from "@chakra-ui/react";
-import { calculateStockReturn } from "../utils";
+import { calculateProfitAndLoss } from "../../utils";
 
-export const ProfitAndLossCalculator = () => {
+export const ProfitAndLossPage = () => {
   const [input, setInput] = useState<Record<string, number | string | null>>({
     bp: "154.83",
     sp: "155.77",
@@ -22,7 +22,7 @@ export const ProfitAndLossCalculator = () => {
   const handleSubmit = (e: FormEvent<HTMLDivElement>) => {
     e.preventDefault();
 
-    const output = calculateStockReturn(input);
+    const output = calculateProfitAndLoss(input);
 
     setOutput(output);
   };

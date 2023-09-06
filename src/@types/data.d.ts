@@ -39,8 +39,9 @@ type ITradeData = {
   id: string;
   time: string;
   type: "buy" | "sell";
-  price: string;
-  count: string;
+  price: number;
+  count: number;
+  commission: number;
   position: "aboveBar" | "belowBar" | "inBar";
   shape: "circle" | "arrowDown" | "square" | "arrowUp";
   text: string;
