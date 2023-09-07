@@ -22,9 +22,11 @@ export const theme = extendTheme(
         "*": {
           "&::-webkit-scrollbar": {
             width: "4px",
+            height: "4px",
           },
           "&::-webkit-scrollbar-track": {
             width: "6px",
+            height: "6px",
           },
           _light: {
             "&::-webkit-scrollbar-thumb": {

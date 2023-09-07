@@ -5,13 +5,11 @@ import { NavIcon } from "./NavIcon";
 export const Sidebar = () => {
   return (
     <VStack
-      w="40px"
+      w="57px"
       pt="48px"
       px="8px"
-      flex="0 0 40px"
       borderRight="1px solid"
       borderColor="border"
-      boxSizing="content-box"
       divider={<StackDivider borderColor="border" />}
     >
       <NavIcon to="/" label="Home">

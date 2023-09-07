@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
+  Box,
   Button,
   Flex,
-  HStack,
   Menu,
   MenuButton,
   MenuItem,
@@ -80,13 +80,13 @@ export const TradePage = () => {
 
   return (
     <Flex direction="column" gap="16px" w="full" h="full">
-      <HStack gap="16px">
+      <Box>
         <Menu>
           <MenuButton
             as={Button}
             size="sm"
             rightIcon={<ChevronDown />}
-            variant="ghost"
+            variant="outline"
             colorScheme="gray"
             value={symbol?.name}
           >
@@ -100,9 +100,9 @@ export const TradePage = () => {
             ))}
           </MenuList>
         </Menu>
-      </HStack>
+      </Box>
 
-      <TableContainer>
+      <TableContainer overflowX="auto" w="full" flex="1">
         <Table>
           <Thead>
             <Tr>
