@@ -1,23 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
-import { ChevronDown } from "react-feather";
+import { Box, Flex, Table, TableContainer, Tbody, Td, Thead, Tr } from "@chakra-ui/react";
 import { useFavoriteStore, useSymbolStore, useTradeStore } from "../../stores";
 import { CalculateBuyPrice, CalculateSellPrice, calculateBuyPrice, calculateSellPrice } from "../../utils";
+import { Select } from "../../components";
 
 export const TradePage = () => {
   const navigate = useNavigate();
@@ -74,32 +60,21 @@ export const TradePage = () => {
     );
   }, [trades]);
 
-  const handleSelectSymbol = (symbolId?: number) => () => {
+  const handleSelectSymbol = (symbolId?: number) => {
     navigate(`/calculates/trade?symbolId=${symbolId}`);
   };
 
   return (
     <Flex direction="column" gap="16px" w="full" h="full">
       <Box>
-        <Menu>
-          <MenuButton
-            as={Button}
-            size="sm"
-            rightIcon={<ChevronDown />}
-            variant="outline"
-            colorScheme="gray"
-            value={symbol?.name}
-          >
-            {symbol ? symbol?.name?.toUpperCase() : "Select symbol"}
-          </MenuButton>
-          <MenuList zIndex="10">
-            {favoriteList.map(favorite => (
-              <MenuItem key={favorite.id} onClick={handleSelectSymbol(favorite.symbols?.id)}>
-                {favorite.symbols?.name}
-              </MenuItem>
-            ))}
-          </MenuList>
-        </Menu>
+        <Select
+          size="sm"
+          variant="outline"
+          colorScheme="gray"
+          value={symbol?.id}
+          options={favoriteList.map(favorite => ({ value: favorite.symbols?.id, label: favorite.symbols?.name }))}
+          onChange={handleSelectSymbol}
+        />
       </Box>
 
       <TableContainer overflowX="auto" w="full" flex="1">

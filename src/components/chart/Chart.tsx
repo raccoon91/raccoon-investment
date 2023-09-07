@@ -1,8 +1,8 @@
 import { FC, useEffect, useRef } from "react";
+import { sortBy } from "lodash-es";
 import { IChartApi, MouseEventParams, createChart } from "lightweight-charts";
 import { Box } from "@chakra-ui/react";
-import { useChartTheme } from "../styles";
-import { sortBy } from "lodash-es";
+import { useChartTheme } from "../../styles";
 
 interface IChartProps {
   chartValues?: ICandleChartData[] | null;

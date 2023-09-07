@@ -22,7 +22,7 @@ export const SymbolPage = () => {
     })
   );
 
-  const handleChangeColumn = (value: "ticker" | "name") => {
+  const handleChangeColumn = (value: string) => {
     changeColumn(value);
   };
 
