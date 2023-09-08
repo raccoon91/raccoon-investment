@@ -264,6 +264,7 @@ export const GroupList: FC<IGroupListProps> = ({ groupList = [], onChageGroupLis
             <Card
               minW="420px"
               draggable
+              data-testid={`${group.name}-group`}
               data-group-id={group.id}
               onDragStart={handleDragStartGroup}
               onDragOver={handleDragOver}

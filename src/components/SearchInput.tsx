@@ -28,13 +28,22 @@ export const SearchInput: FC<ISearchInputProps> = memo(
       <Flex as="form" position="relative" onSubmit={onSubmit}>
         <Select
           w="120px"
+          testId="search"
           variant="outline"
           borderRightRadius="none"
           value={column}
           options={searchOptions}
           onChange={handleClickMenuItem}
         />
-        <Input w="240px" borderLeftRadius="none" borderLeft="none" pr="40px" value={search} onChange={onChangeSearch} />
+        <Input
+          w="240px"
+          data-testid="search-input-field"
+          borderLeftRadius="none"
+          borderLeft="none"
+          pr="40px"
+          value={search}
+          onChange={onChangeSearch}
+        />
         <IconButton
           position="absolute"
           top="0"

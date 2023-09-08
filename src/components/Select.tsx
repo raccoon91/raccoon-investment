@@ -5,10 +5,11 @@ import { ChevronDown } from "react-feather";
 interface ISelectProps extends Omit<ButtonProps, "value" | "onChange"> {
   value?: string | number;
   options: { value?: string | number; label?: string }[];
+  testId?: string;
   onChange?: (value: any) => void;
 }
 
-export const Select: FC<ISelectProps> = ({ value, options, onChange, ...props }) => {
+export const Select: FC<ISelectProps> = ({ value, options, testId, onChange, ...props }) => {
   const selected = useMemo(
     () => options.find(option => option.value?.toString() === value?.toString()),
     [value, options]
@@ -22,12 +23,22 @@ export const Select: FC<ISelectProps> = ({ value, options, onChange, ...props })
 
   return (
     <Menu>
-      <MenuButton as={Button} value={value} rightIcon={<ChevronDown />} {...props}>
+      <MenuButton
+        data-testid={testId ? `${testId}-select-box` : "select-box"}
+        as={Button}
+        value={value}
+        rightIcon={<ChevronDown />}
+        {...props}
+      >
         {selected?.label ?? "NONE"}
       </MenuButton>
-      <MenuList zIndex="10">
+      <MenuList zIndex="10" data-testid={testId ? `${testId}-option-list` : "option-list"}>
         {options.map((option, index) => (
-          <MenuItem key={index} onClick={handleClickMenuItem(option.value)}>
+          <MenuItem
+            key={index}
+            data-testid={testId ? `${testId}-option-item` : "option-item"}
+            onClick={handleClickMenuItem(option.value)}
+          >
             {option.label}
           </MenuItem>
         ))}

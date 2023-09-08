@@ -15,6 +15,7 @@ export const NavIcon: FC<PropsWithChildren<INavIconProps>> = ({ to, label, child
       <Link
         to={to}
         as={NavLink}
+        data-testid={`${label}-sidebar-link`}
         position="relative"
         display="flex"
         alignItems="center"

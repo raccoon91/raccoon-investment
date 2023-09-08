@@ -1,0 +1,18 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://172.29.43.236:3000",
+      "localStorage": [
+        {
+          "name": "sb-ycjheojaoszgisyiqzxp-auth-token",
+          "value": "{\"access_token\":\"eyJhbGciOiJIUzI1NiIsImtpZCI6Ikk4TWxONCtCWElxUVN3Z1AiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNjk0MTgxMjA1LCJpYXQiOjE2OTQxNzc2MDUsImlzcyI6Imh0dHBzOi8veWNqaGVvamFvc3pnaXN5aXF6eHAuc3VwYWJhc2UuY28vYXV0aC92MSIsInN1YiI6ImUzOWQ5MGI3LTIzZTEtNDNkZC05MjU2LTc1NGY1ZDgyNWQyNiIsImVtYWlsIjoicmFjY29vbkBnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7fSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTY5NDE3NzYwNX1dLCJzZXNzaW9uX2lkIjoiOTBkMDAyYTMtOGFjOS00NTY1LTk3ZjMtMWQ4NjFhODg2NDE3In0.a5TyPlf4UJQI3r28GGln8z5HFpseuuOOxOpoqNQ7R9M\",\"token_type\":\"bearer\",\"expires_in\":3600,\"expires_at\":1694181205,\"refresh_token\":\"YCqQj4jRboYveqa6I5tvdA\",\"user\":{\"id\":\"e39d90b7-23e1-43dd-9256-754f5d825d26\",\"aud\":\"authenticated\",\"role\":\"authenticated\",\"email\":\"raccoon@gmail.com\",\"email_confirmed_at\":\"2023-09-02T09:56:29.289141Z\",\"phone\":\"\",\"confirmed_at\":\"2023-09-02T09:56:29.289141Z\",\"last_sign_in_at\":\"2023-09-08T12:53:25.855152132Z\",\"app_metadata\":{\"provider\":\"email\",\"providers\":[\"email\"]},\"user_metadata\":{},\"identities\":[{\"id\":\"e39d90b7-23e1-43dd-9256-754f5d825d26\",\"user_id\":\"e39d90b7-23e1-43dd-9256-754f5d825d26\",\"identity_data\":{\"email\":\"raccoon@gmail.com\",\"sub\":\"e39d90b7-23e1-43dd-9256-754f5d825d26\"},\"provider\":\"email\",\"last_sign_in_at\":\"2023-09-02T09:56:29.287269Z\",\"created_at\":\"2023-09-02T09:56:29.287311Z\",\"updated_at\":\"2023-09-02T09:56:29.287311Z\"}],\"created_at\":\"2023-09-02T09:56:29.283351Z\",\"updated_at\":\"2023-09-08T12:53:25.858906Z\"}}"
+        },
+        {
+          "name": "chakra-ui-color-mode",
+          "value": "dark"
+        }
+      ]
+    }
+  ]
+}
