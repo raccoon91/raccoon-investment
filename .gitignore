@@ -25,6 +25,9 @@ dist-ssr
 
 # env
 .env
+
+# playwright
 /test-results/
 /playwright-report/
-/playwright/.cache/
+/src/playwright/.auth/
+/src/playwright/.cache/
