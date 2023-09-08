@@ -1,5 +1,5 @@
 import { ArgumentsType } from "vitest";
-import { CalculateProfitAndLoss } from "../utils";
+import { CalculateProfitAndLoss } from "../../utils";
 
 type Mock = {
   params: ArgumentsType<CalculateProfitAndLoss>[0];

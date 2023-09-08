@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { calculateProfitAndLoss } from "../utils";
+import { calculateProfitAndLoss } from "../../utils";
 import { profitAndLossExceptionMocks, profitAndLossMocks, profitAndLossWithTaxMocks } from "./mock";
 
 describe("utils test", () => {
