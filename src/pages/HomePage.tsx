@@ -5,15 +5,15 @@ import { GroupList } from "../components";
 import { useFavoriteStore } from "../stores";
 
 export const HomePage = () => {
-  const { copyGroupList, getGroupData, setCopyGroupList, saveGroupListOrder } = useFavoriteStore(state => ({
+  const { copyGroupList, getGroupList, setCopyGroupList, saveGroupListOrder } = useFavoriteStore(state => ({
     copyGroupList: state.copyGroupList,
-    getGroupData: state.getGroupData,
+    getGroupList: state.getGroupList,
     setCopyGroupList: state.setCopyGroupList,
     saveGroupListOrder: state.saveGroupListOrder,
   }));
 
   useEffect(() => {
-    getGroupData();
+    getGroupList();
   }, []);
 
   const handleChangeFavoriteList = (

@@ -9,7 +9,7 @@ interface IFavoriteStore {
   copyGroupList: IGroupData[] | null;
   favoriteMap: Record<number, { id: number; order: number | null; group_id: number | null; symbol_id: number }>;
   favoriteList: IFavoriteData[];
-  getGroupData: () => Promise<void>;
+  getGroupList: () => Promise<void>;
   getFavoriteMap: () => Promise<void>;
   getFavoriteList: () => Promise<void>;
   setCopyGroupList: (groupList: IGroupData[] | null) => void;
@@ -23,7 +23,7 @@ export const useFavoriteStore = create<IFavoriteStore>((set, get) => ({
   favoriteMap: {},
   favoriteList: [],
   copyGroupList: [],
-  getGroupData: async () => {
+  getGroupList: async () => {
     try {
       useGlobalStore.getState().setIsLoad(true);
 

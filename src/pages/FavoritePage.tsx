@@ -5,10 +5,10 @@ import { GroupList } from "../components";
 import { useFavoriteStore } from "../stores";
 
 export const FavoritePage = () => {
-  const { copyGroupList, getGroupData, deleteFavorite, setCopyGroupList, saveGroupListOrder } = useFavoriteStore(
+  const { copyGroupList, getGroupList, deleteFavorite, setCopyGroupList, saveGroupListOrder } = useFavoriteStore(
     state => ({
       copyGroupList: state.copyGroupList,
-      getGroupData: state.getGroupData,
+      getGroupList: state.getGroupList,
       deleteFavorite: state.deleteFavorite,
       setCopyGroupList: state.setCopyGroupList,
       saveGroupListOrder: state.saveGroupListOrder,
@@ -16,7 +16,7 @@ export const FavoritePage = () => {
   );
 
   useEffect(() => {
-    getGroupData();
+    getGroupList();
   }, []);
 
   const handleChangeFavoriteList = (
@@ -38,7 +38,7 @@ export const FavoritePage = () => {
     if (!favoriteId) return;
 
     await deleteFavorite(favoriteId);
-    await getGroupData();
+    await getGroupList();
   };
 
   return (
