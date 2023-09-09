@@ -16,24 +16,27 @@ export const TradePage = () => {
     favoriteList: state.favoriteList,
     getFavoriteList: state.getFavoriteList,
   }));
-  const { trades, getTradeData } = useTradeStore(state => ({
+  const { trades, getTradeData, getAllTradeData } = useTradeStore(state => ({
     trades: state.trades,
     getTradeData: state.getTradeData,
+    getAllTradeData: state.getAllTradeData,
   }));
   const [outputs, setOutputs] = useState<
     (
-      | ({ type: "buy" } & Partial<ReturnType<CalculateBuyPrice>>)
-      | ({ type: "sell" } & Partial<ReturnType<CalculateSellPrice>>)
+      | ({ type: "buy"; date: string } & Partial<ReturnType<CalculateBuyPrice>>)
+      | ({ type: "sell"; date: string } & Partial<ReturnType<CalculateSellPrice>>)
     )[]
   >([]);
 
   useEffect(() => {
     getFavoriteList();
 
-    if (!params.get("symbolId")) return;
-
-    getSymbolData(params.get("symbolId"));
-    getTradeData(Number(params.get("symbolId")));
+    if (!params.get("symbolId") || params.get("symbolId") === "all") {
+      getAllTradeData();
+    } else {
+      getSymbolData(params.get("symbolId"));
+      getTradeData(Number(params.get("symbolId")));
+    }
   }, [params]);
 
   useEffect(() => {
@@ -42,6 +45,7 @@ export const TradePage = () => {
         trade.type === "buy"
           ? {
               type: trade.type,
+              date: trade.time,
               ...calculateBuyPrice({
                 bp: trade.price,
                 nos: trade.count,
@@ -50,6 +54,7 @@ export const TradePage = () => {
             }
           : {
               type: trade.type,
+              date: trade.time,
               ...calculateSellPrice({
                 sp: trade.price,
                 nos: trade.count,
@@ -71,18 +76,25 @@ export const TradePage = () => {
           size="sm"
           variant="outline"
           colorScheme="gray"
-          value={symbol?.id}
-          options={favoriteList.map(favorite => ({ value: favorite.symbols?.id, label: favorite.symbols?.name }))}
+          value={symbol?.id ?? params.get("symbolId") ?? ""}
+          options={[
+            { value: "all", label: "ALL" },
+            ...favoriteList.map(favorite => ({
+              value: favorite.symbols?.id,
+              label: favorite.symbols?.name,
+            })),
+          ]}
           onChange={handleSelectSymbol}
         />
       </Box>
 
-      <TableContainer overflowX="auto" w="full" flex="1">
+      <TableContainer overflowX="auto" overflowY="auto" w="full" flex="1">
         <Table>
           <Thead>
             <Tr>
               <Td whiteSpace="nowrap">Type</Td>
               <Td whiteSpace="nowrap">Price</Td>
+              <Td whiteSpace="nowrap">Date</Td>
               <Td whiteSpace="nowrap">Buying Commission</Td>
               <Td whiteSpace="nowrap">Selling Commission</Td>
               <Td whiteSpace="nowrap">TAF Tax</Td>
@@ -97,6 +109,7 @@ export const TradePage = () => {
                 <Tr key={index}>
                   <Td>{output.type.toUpperCase()}</Td>
                   <Td>{output.price}</Td>
+                  <Td>{output.date}</Td>
                   <Td>{output.buyingCommission}</Td>
                   <Td>-</Td>
                   <Td>-</Td>
@@ -108,6 +121,7 @@ export const TradePage = () => {
                 <Tr key={index}>
                   <Td>{output.type.toUpperCase()}</Td>
                   <Td>{output.price}</Td>
+                  <Td>{output.date}</Td>
                   <Td>-</Td>
                   <Td>{output.sellingCommission}</Td>
                   <Td>{output.TAFTax}</Td>

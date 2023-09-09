@@ -46,7 +46,7 @@ export const CalculatePage = () => {
         </TabList>
       </Tabs>
 
-      <Box flex="1" pt="24px" px="36px">
+      <Box h="calc(100% - 42px)" pt="24px" px="36px">
         <Outlet />
       </Box>
     </Flex>

@@ -5,6 +5,7 @@ import { db } from "../db";
 interface ITradeStore {
   trades: ITradeData[];
   getTradeData: (symbolId?: number) => Promise<void>;
+  getAllTradeData: () => Promise<void>;
   saveTradeData: (trade: Omit<ITradeData, "position" | "shape">) => Promise<void>;
 }
 
@@ -15,6 +16,16 @@ export const useTradeStore = create<ITradeStore>(set => ({
       if (symbolId === undefined) return;
 
       const tradeData = await db.trades.where({ symbol_id: symbolId }).toArray();
+      const sortedTradeData = sortBy(tradeData, "time");
+
+      set({ trades: sortedTradeData });
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  getAllTradeData: async () => {
+    try {
+      const tradeData = await db.trades.toArray();
       const sortedTradeData = sortBy(tradeData, "time");
 
       set({ trades: sortedTradeData });
