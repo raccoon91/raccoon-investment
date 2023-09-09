@@ -1,44 +1,15 @@
-import dayjs from "dayjs";
-import { cloneDeep, sortBy } from "lodash-es";
+import { sortBy } from "lodash-es";
 import { create } from "zustand";
 import { db } from "../db";
 
 interface IMarkerStore {
   markers: IMarkerData[];
-  markerJson: string;
-  addMarker: (symbolId?: string | null) => void;
-  changeMarker: (value?: string) => void;
   getMarkerData: (symbolId?: string | null) => Promise<void>;
-  saveMarkerData: () => Promise<void>;
+  saveMarkerData: (marker: Omit<IMarkerData, "position" | "shape">) => Promise<void>;
 }
 
-export const useMarkerStore = create<IMarkerStore>((set, get) => ({
+export const useMarkerStore = create<IMarkerStore>(set => ({
   markers: [],
-  markerJson: "",
-  addMarker: (symbolId?: string | null) => {
-    if (!symbolId) return;
-
-    const markers = cloneDeep(get().markers ?? []);
-
-    markers.unshift({
-      id: symbolId,
-      time: dayjs().format("YYYY-MM-DD"),
-      position: "aboveBar",
-      shape: "circle",
-      text: "dividen",
-    });
-
-    set({ markerJson: JSON.stringify(markers, null, 4) });
-  },
-  changeMarker: (value?: string) => {
-    try {
-      if (!value) return;
-
-      set({ markerJson: value });
-    } catch (err) {
-      console.error(err);
-    }
-  },
   getMarkerData: async (symbolId?: string | null) => {
     try {
       if (!symbolId) return;
@@ -46,19 +17,18 @@ export const useMarkerStore = create<IMarkerStore>((set, get) => ({
       const markerData = await db.markers.where({ id: symbolId }).toArray();
       const sortedMarkerData = sortBy(markerData, "time");
 
-      set({ markers: sortedMarkerData, markerJson: JSON.stringify(sortedMarkerData, null, 4) });
+      set({ markers: sortedMarkerData });
     } catch (err) {
       console.error(err);
     }
   },
-  saveMarkerData: async () => {
+  saveMarkerData: async (marker: Omit<IMarkerData, "position" | "shape">) => {
     try {
-      const markerJson = get().markerJson;
-      const markers: IMarkerData[] = JSON.parse(markerJson);
-
-      await db.markers.bulkPut(markers);
-
-      set({ markers });
+      await db.markers.put({
+        ...marker,
+        position: "aboveBar",
+        shape: "circle",
+      });
     } catch (err) {
       console.error(err);
     }

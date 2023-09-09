@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect } from "react";
+import { ChangeEvent, FC, MouseEvent, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import {
   Box,
@@ -14,17 +14,17 @@ import {
   Icon,
   IconButton,
   Input,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
   Text,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
 import { Save } from "react-feather";
-import { Select } from "../Select";
 import { Datepicker } from "../Datepicker";
 import { useTradeStore } from "../../stores";
-
-const tradeOptions = [
-  { value: "buy", label: "Buy" },
-  { value: "sell", label: "Sell" },
-];
 
 interface ITradeDrawerProps {
   isOpen: boolean;
@@ -33,11 +33,10 @@ interface ITradeDrawerProps {
 }
 
 export const TradeDrawer: FC<ITradeDrawerProps> = ({ isOpen, symbol, onClose }) => {
-  const { trades, tradeJson, addTrade, changeTrade, getTradeData, saveTradeData } = useTradeStore(state => ({
+  const [type, setType] = useState("list");
+  const [newTrade, setNewTrade] = useState<Record<string, any> | null>(null);
+  const { trades, getTradeData, saveTradeData } = useTradeStore(state => ({
     trades: state.trades,
-    tradeJson: state.tradeJson,
-    addTrade: state.addTrade,
-    changeTrade: state.changeTrade,
     getTradeData: state.getTradeData,
     saveTradeData: state.saveTradeData,
   }));
@@ -48,31 +47,48 @@ export const TradeDrawer: FC<ITradeDrawerProps> = ({ isOpen, symbol, onClose }) 
     getTradeData(symbol?.id?.toString());
   }, [symbol]);
 
-  const handleAddBuy = () => {
-    addTrade(symbol?.id?.toString(), "buy");
+  const handleCloseCreateTrade = () => {
+    setType("list");
+    setNewTrade(null);
   };
 
-  const handleAddSell = () => {
-    addTrade(symbol?.id?.toString(), "sell");
-  };
+  const handleCreateTrade = (e: MouseEvent<HTMLButtonElement>) => {
+    const tradeType = e.currentTarget.dataset["tradeType"];
 
-  const handleChangeTradeType = (value: string) => {
-    console.log(value);
+    if (!symbol?.id || !tradeType) return;
+
+    setType(tradeType);
+    setNewTrade({
+      id: symbol.id.toString(),
+      time: dayjs().format("YYYY-MM-DD"),
+      type: tradeType,
+      price: 0,
+      count: 0,
+      commission: 0.1,
+      text: tradeType,
+    });
   };
 
   const handleChangeTrade = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
+    const { name, value } = e.target;
+
+    setNewTrade(p => ({ ...(p ?? {}), [name]: value }));
   };
 
   const handleChangeTradeDate = (date: Date | null) => {
     if (!date) return;
 
-    console.log(dayjs(date).format("YYYY-MM-DD"));
+    setNewTrade(p => ({ ...(p ?? {}), time: dayjs(date).format("YYYY-MM-DD") }));
   };
 
   const handleSaveTrade = async () => {
-    await saveTradeData();
+    if (!newTrade) return;
+
+    await saveTradeData(newTrade as Omit<ITradeData, "position" | "shape">);
     await getTradeData(symbol?.id?.toString());
+
+    setType("list");
+    setNewTrade(null);
   };
 
   return (
@@ -89,80 +105,122 @@ export const TradeDrawer: FC<ITradeDrawerProps> = ({ isOpen, symbol, onClose }) 
                 Trade
               </Heading>
 
-              <Button ml="auto" variant="ghost" colorScheme="blue" onClick={handleAddBuy}>
+              <Button
+                ml="auto"
+                variant={type === "buy" ? "solid" : "ghost"}
+                colorScheme="blue"
+                data-trade-type="buy"
+                onClick={handleCreateTrade}
+              >
                 Buy
               </Button>
 
-              <Button ml="8px" variant="ghost" colorScheme="red" onClick={handleAddSell}>
+              <Button
+                ml="8px"
+                variant={type === "sell" ? "solid" : "ghost"}
+                colorScheme="red"
+                data-trade-type="sell"
+                onClick={handleCreateTrade}
+              >
                 Sell
               </Button>
             </HStack>
 
-            <Flex overflow="auto" direction="column" gap="16px" w="full" flex="1">
-              {trades.map((trade, index) => (
-                <Flex key={index} direction="column" gap="4px">
-                  <Flex align="center">
-                    <Text w="140px">Type</Text>
-                    <Select
-                      size="sm"
-                      w="140px"
-                      variant="outline"
-                      colorScheme="gray"
-                      value={trade.type}
-                      options={tradeOptions}
-                      onChange={handleChangeTradeType}
-                    />
-                  </Flex>
-                  <Flex align="center">
-                    <Text w="140px">Price</Text>
+            {type === "list" ? (
+              <TableContainer overflowY="auto" w="full" flex="1">
+                <Table>
+                  <Thead>
+                    <Tr>
+                      <Td>Date</Td>
+                      <Td>Type</Td>
+                      <Td>Count</Td>
+                      <Td>Price</Td>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {trades.map((trade, index) => (
+                      <Tr key={index}>
+                        <Td>{trade.time}</Td>
+                        <Td>{trade.type}</Td>
+                        <Td>{trade.count}</Td>
+                        <Td>{trade.price}</Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <Flex overflow="auto" direction="column" w="full" flex="1">
+                <Flex direction="column" gap="8px">
+                  <Flex align="center" justify="space-between" px="24px">
+                    <Text>Price</Text>
                     <Input
                       type="number"
-                      size="sm"
-                      w="140px"
+                      w="200px"
                       textAlign="right"
-                      value={trade.price}
+                      name="price"
+                      value={newTrade?.price}
                       onChange={handleChangeTrade}
                     />
                   </Flex>
-                  <Flex align="center">
-                    <Text w="140px">Count</Text>
+                  <Flex align="center" justify="space-between" px="24px">
+                    <Text>Count</Text>
                     <Input
                       type="number"
-                      size="sm"
-                      w="140px"
+                      w="200px"
                       textAlign="right"
-                      value={trade.count}
+                      name="count"
+                      value={newTrade?.count}
                       onChange={handleChangeTrade}
                     />
                   </Flex>
-                  <Flex align="center">
-                    <Text w="140px">Commission</Text>
+                  <Flex align="center" justify="space-between" px="24px">
+                    <Text>Commission</Text>
                     <Input
                       type="number"
-                      size="sm"
-                      w="140px"
+                      w="200px"
                       textAlign="right"
-                      value={trade.commission}
+                      name="commission"
+                      value={newTrade?.commission}
                       onChange={handleChangeTrade}
                     />
                   </Flex>
-                  <Flex align="center">
-                    <Text w="140px">Date</Text>
-                    <Datepicker size="sm" w="140px" value={trade.time} onChange={handleChangeTradeDate} />
+                  <Flex align="center" justify="space-between" px="24px">
+                    <Text>Date</Text>
+                    <Box w="200px">
+                      <Datepicker
+                        w="full"
+                        textAlign="right"
+                        value={newTrade?.time?.toString() ?? ""}
+                        onChange={handleChangeTradeDate}
+                      />
+                    </Box>
                   </Flex>
-                  <Flex align="center">
-                    <Text w="140px">Text</Text>
-                    <Input size="sm" w="140px" textAlign="right" value={trade.text} onChange={handleChangeTrade} />
+                  <Flex align="center" justify="space-between" px="24px">
+                    <Text>Text</Text>
+                    <Input
+                      w="200px"
+                      textAlign="right"
+                      name="text"
+                      value={newTrade?.text}
+                      onChange={handleChangeTrade}
+                    />
                   </Flex>
                 </Flex>
-              ))}
-            </Flex>
 
-            {/* <Textarea h="300px" resize="none" value={tradeJson} onChange={handleChangeTrade} /> */}
-
-            <Box textAlign="right">
-              <IconButton aria-label="save dividen" icon={<Icon as={Save} />} onClick={handleSaveTrade} />
-            </Box>
+                <Flex justify="flex-end" gap="32px" mt="48px">
+                  <Button variant="ghost" colorScheme="red" onClick={handleCloseCreateTrade}>
+                    Cancel
+                  </Button>
+                  <IconButton
+                    aria-label="save dividen"
+                    variant="ghost"
+                    icon={<Icon as={Save} />}
+                    onClick={handleSaveTrade}
+                  />
+                </Flex>
+              </Flex>
+            )}
           </Flex>
         </DrawerBody>
       </DrawerContent>

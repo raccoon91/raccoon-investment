@@ -21,7 +21,7 @@ export const ChartPage = () => {
   }));
   const trades = useTradeStore(state => state.trades);
   const markers = useMarkerStore(state => state.markers);
-  const [isOpenTradeDrawer, setIsOpenTradeDrawer] = useState(true);
+  const [isOpenTradeDrawer, setIsOpenTradeDrawer] = useState(false);
   const [isOpenMarkerDrawer, setIsOpenMarkerDrawer] = useState(false);
 
   const isEmpty = useMemo(() => !!chartValues && chartValues.length === 0, [chartValues]);
