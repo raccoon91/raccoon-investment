@@ -25,7 +25,7 @@ export const useChartStore = create<IChartStore>(set => ({
 
       const { data: symbol } = await supabase.from("symbols").select("*").eq("id", symbolId).maybeSingle();
 
-      const chartValues = await db.charts.where({ id: Number(symbolId) }).toArray();
+      const chartValues = await db.charts.where({ symbol_id: Number(symbolId) }).toArray();
       const sortedChartValues = sortBy(chartValues, "time");
 
       set({ symbol, chartValues: sortedChartValues });
@@ -56,7 +56,7 @@ export const useChartStore = create<IChartStore>(set => ({
         });
 
         const chartValues = uniqBy(res?.data?.values ?? [], data => data.datetime).map(data => ({
-          id: symbol.id,
+          symbol_id: symbol.id,
           time: data.datetime,
           open: Number(data.open),
           high: Number(data.high),

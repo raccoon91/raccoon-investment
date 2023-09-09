@@ -27,7 +27,7 @@ type IGroupData = {
 };
 
 type ICandleChartData = {
-  id: number;
+  symbol_id: number;
   time: string;
   open: number;
   high: number;
@@ -36,7 +36,7 @@ type ICandleChartData = {
 };
 
 type ITradeData = {
-  id: string;
+  symbol_id: number;
   time: string;
   type: "buy" | "sell";
   price: number;
@@ -48,7 +48,7 @@ type ITradeData = {
 };
 
 type IMarkerData = {
-  id: string;
+  symbol_id: number;
   time: string;
   position: "aboveBar" | "belowBar" | "inBar";
   shape: "circle" | "arrowDown" | "square" | "arrowUp";

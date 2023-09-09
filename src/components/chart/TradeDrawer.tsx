@@ -42,9 +42,9 @@ export const TradeDrawer: FC<ITradeDrawerProps> = ({ isOpen, symbol, onClose }) 
   }));
 
   useEffect(() => {
-    if (!symbol?.id) return;
+    if (symbol?.id === undefined) return;
 
-    getTradeData(symbol?.id?.toString());
+    getTradeData(symbol?.id);
   }, [symbol]);
 
   const handleCloseCreateTrade = () => {
@@ -55,11 +55,12 @@ export const TradeDrawer: FC<ITradeDrawerProps> = ({ isOpen, symbol, onClose }) 
   const handleCreateTrade = (e: MouseEvent<HTMLButtonElement>) => {
     const tradeType = e.currentTarget.dataset["tradeType"];
 
-    if (!symbol?.id || !tradeType) return;
+    if (symbol?.id === undefined || !tradeType) return;
 
     setType(tradeType);
     setNewTrade({
-      id: symbol.id.toString(),
+      id: trades.length,
+      symbol_id: symbol.id,
       time: dayjs().format("YYYY-MM-DD"),
       type: tradeType,
       price: 0,
@@ -82,10 +83,10 @@ export const TradeDrawer: FC<ITradeDrawerProps> = ({ isOpen, symbol, onClose }) 
   };
 
   const handleSaveTrade = async () => {
-    if (!newTrade) return;
+    if (symbol?.id === undefined || !newTrade) return;
 
     await saveTradeData(newTrade as Omit<ITradeData, "position" | "shape">);
-    await getTradeData(symbol?.id?.toString());
+    await getTradeData(symbol?.id);
 
     setType("list");
     setNewTrade(null);
@@ -159,6 +160,7 @@ export const TradeDrawer: FC<ITradeDrawerProps> = ({ isOpen, symbol, onClose }) 
                       w="200px"
                       textAlign="right"
                       name="price"
+                      autoFocus
                       value={newTrade?.price}
                       onChange={handleChangeTrade}
                     />

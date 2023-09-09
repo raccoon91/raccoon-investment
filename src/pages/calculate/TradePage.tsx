@@ -33,7 +33,7 @@ export const TradePage = () => {
     if (!params.get("symbolId")) return;
 
     getSymbolData(params.get("symbolId"));
-    getTradeData(params.get("symbolId"));
+    getTradeData(Number(params.get("symbolId")));
   }, [params]);
 
   useEffect(() => {

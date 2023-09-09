@@ -9,9 +9,9 @@ export class Dexie extends DexieBase {
     super("raccoon-investment");
 
     this.version(1).stores({
-      charts: "[id+time]",
-      trades: "[id+time]",
-      markers: "[id+time]",
+      charts: "[symbol_id+time]",
+      trades: "[symbol_id+id]",
+      markers: "[symbol_id+id]",
     });
   }
 }

@@ -42,9 +42,9 @@ export const MarkerDrawer: FC<IMarkerDrawerProps> = ({ isOpen, symbol, onClose }
   }));
 
   useEffect(() => {
-    if (!symbol?.id) return;
+    if (symbol?.id === undefined) return;
 
-    getMarkerData(symbol?.id?.toString());
+    getMarkerData(symbol?.id);
   }, [symbol]);
 
   const handleCloseCreateMarker = () => {
@@ -53,11 +53,12 @@ export const MarkerDrawer: FC<IMarkerDrawerProps> = ({ isOpen, symbol, onClose }
   };
 
   const handleCreateMarker = () => {
-    if (!symbol?.id) return;
+    if (symbol?.id === undefined) return;
 
     setIsCreate(true);
     setNewMarker({
-      id: symbol.id.toString(),
+      id: markers.length,
+      symbol_id: symbol.id,
       time: dayjs().format("YYYY-MM-DD"),
       text: "dividen",
     });
@@ -76,10 +77,10 @@ export const MarkerDrawer: FC<IMarkerDrawerProps> = ({ isOpen, symbol, onClose }
   };
 
   const handleSaveMarker = async () => {
-    if (!newMarker) return;
+    if (symbol?.id === undefined || !newMarker) return;
 
     await saveMarkerData(newMarker as Omit<IMarkerData, "position" | "shape">);
-    await getMarkerData(symbol?.id?.toString());
+    await getMarkerData(symbol?.id);
 
     setIsCreate(false);
     setNewMarker(null);

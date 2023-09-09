@@ -4,17 +4,17 @@ import { db } from "../db";
 
 interface IMarkerStore {
   markers: IMarkerData[];
-  getMarkerData: (symbolId?: string | null) => Promise<void>;
+  getMarkerData: (symbolId?: number) => Promise<void>;
   saveMarkerData: (marker: Omit<IMarkerData, "position" | "shape">) => Promise<void>;
 }
 
 export const useMarkerStore = create<IMarkerStore>(set => ({
   markers: [],
-  getMarkerData: async (symbolId?: string | null) => {
+  getMarkerData: async (symbolId?: number) => {
     try {
-      if (!symbolId) return;
+      if (symbolId === undefined) return;
 
-      const markerData = await db.markers.where({ id: symbolId }).toArray();
+      const markerData = await db.markers.where({ symbol_id: symbolId }).toArray();
       const sortedMarkerData = sortBy(markerData, "time");
 
       set({ markers: sortedMarkerData });
