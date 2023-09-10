@@ -15,9 +15,9 @@ import {
 } from "@chakra-ui/react";
 import { LogOut } from "react-feather";
 import { Sidebar } from "./Sidebar";
-import { useGlobalStore, useUserStore } from "../stores";
+import { useGlobalStore, useUserStore } from "../../stores";
 
-export const Layout = () => {
+export const MainLayout = () => {
   const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode();
   const isLoad = useGlobalStore(state => state.isLoad);
@@ -56,7 +56,7 @@ export const Layout = () => {
     <Flex w="100vw" h="100vh">
       <Sidebar />
 
-      <Flex direction="column" align="stretch" w="calc(100% - 57px)">
+      <Box w="calc(100% - 57px)" h="full">
         <HStack h="49px" px="36px" borderBottom="1px solid" borderColor="border" justify="space-between">
           <Text>{user?.email ?? ""}</Text>
 
@@ -69,7 +69,7 @@ export const Layout = () => {
           </HStack>
         </HStack>
 
-        <Box overflow="hidden" position="relative" h="calc(100% - 49px)" p="30px">
+        <Box position="relative" h="calc(100% - 49px)">
           {isLoad && (
             <Center position="absolute" top="0" left="0" w="100%" h="100%" zIndex="10">
               <Spinner thickness="4px" speed="0.65s" emptyColor="border" color={primary} size="xl" />
@@ -78,7 +78,7 @@ export const Layout = () => {
 
           <Outlet />
         </Box>
-      </Flex>
+      </Box>
     </Flex>
   );
 };

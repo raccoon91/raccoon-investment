@@ -153,7 +153,7 @@ export const GroupList: FC<IGroupListProps> = ({ groupList = [], onChageGroupLis
   };
 
   return (
-    <Wrap overflow="auto" flex="1" spacing="20px">
+    <Wrap spacing="20px">
       {groupList?.map(group => (
         <Card
           key={group.id}

@@ -10,7 +10,7 @@ interface ISymbolListProps {
 
 export const SymbolList: FC<ISymbolListProps> = memo(({ symbolList, favoriteMap, onClickFavorite }) => {
   return (
-    <Wrap overflow="auto" flex="1" spacing="16px">
+    <Wrap spacing="16px">
       {symbolList?.map(symbol => (
         <Card key={symbol.id}>
           <CardHeader pb="0">

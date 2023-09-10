@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Box, Flex, Table, TableContainer, Tbody, Td, Thead, Tr } from "@chakra-ui/react";
+import { Table, TableContainer, Tbody, Td, Thead, Tr } from "@chakra-ui/react";
+import { ContentsLayout } from "../../layouts";
+import { Select } from "../../components";
 import { useFavoriteStore, useSymbolStore, useTradeStore } from "../../stores";
 import { CalculateBuyPrice, CalculateSellPrice, calculateBuyPrice, calculateSellPrice } from "../../utils";
-import { Select } from "../../components";
 
 export const TradePage = () => {
   const navigate = useNavigate();
@@ -70,8 +71,8 @@ export const TradePage = () => {
   };
 
   return (
-    <Flex direction="column" gap="16px" w="full" h="full">
-      <Box>
+    <ContentsLayout
+      left={
         <Select
           size="sm"
           variant="outline"
@@ -86,8 +87,8 @@ export const TradePage = () => {
           ]}
           onChange={handleSelectSymbol}
         />
-      </Box>
-
+      }
+    >
       <TableContainer overflowX="auto" overflowY="auto" w="full" flex="1">
         <Table>
           <Thead>
@@ -134,6 +135,6 @@ export const TradePage = () => {
           </Tbody>
         </Table>
       </TableContainer>
-    </Flex>
+    </ContentsLayout>
   );
 };

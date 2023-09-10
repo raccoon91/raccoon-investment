@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Box, Button, Flex, FormControl, FormLabel, Input, Text, VStack } from "@chakra-ui/react";
+import { ContentsLayout } from "../../layouts";
 import { calculateProfitAndLoss } from "../../utils";
 
 export const ProfitAndLossPage = () => {
@@ -34,81 +35,83 @@ export const ProfitAndLossPage = () => {
   };
 
   return (
-    <Flex overflow="auto" gap="80px" w="full" h="full">
-      <VStack as="form" align="stretch" gap="16px" w="400px" onSubmit={handleSubmit}>
-        <FormControl as={Flex} gap="16px" align="center">
-          <FormLabel w="180px" m="0" flex="0 0 180px">
-            Buy Price
-          </FormLabel>
-          <Input
-            type="number"
-            name="bp"
-            autoFocus
-            textAlign="right"
-            value={input.bp ?? ""}
-            onChange={handleChangeInput}
-          />
-        </FormControl>
+    <ContentsLayout>
+      <Flex gap="60px">
+        <VStack as="form" align="stretch" gap="16px" w="400px" onSubmit={handleSubmit}>
+          <FormControl as={Flex} gap="16px" align="center">
+            <FormLabel w="180px" m="0" flex="0 0 180px">
+              Buy Price
+            </FormLabel>
+            <Input
+              type="number"
+              name="bp"
+              autoFocus
+              textAlign="right"
+              value={input.bp ?? ""}
+              onChange={handleChangeInput}
+            />
+          </FormControl>
 
-        <FormControl as={Flex} gap="16px" align="center">
-          <FormLabel w="180px" m="0" flex="0 0 180px">
-            Selling Price
-          </FormLabel>
-          <Input type="number" name="sp" textAlign="right" value={input.sp ?? ""} onChange={handleChangeInput} />
-        </FormControl>
+          <FormControl as={Flex} gap="16px" align="center">
+            <FormLabel w="180px" m="0" flex="0 0 180px">
+              Selling Price
+            </FormLabel>
+            <Input type="number" name="sp" textAlign="right" value={input.sp ?? ""} onChange={handleChangeInput} />
+          </FormControl>
 
-        <FormControl as={Flex} gap="16px" align="center">
-          <FormLabel w="180px" m="0" flex="0 0 180px">
-            Number of stocks
-          </FormLabel>
-          <Input type="number" name="nos" textAlign="right" value={input.nos ?? ""} onChange={handleChangeInput} />
-        </FormControl>
+          <FormControl as={Flex} gap="16px" align="center">
+            <FormLabel w="180px" m="0" flex="0 0 180px">
+              Number of stocks
+            </FormLabel>
+            <Input type="number" name="nos" textAlign="right" value={input.nos ?? ""} onChange={handleChangeInput} />
+          </FormControl>
 
-        <FormControl as={Flex} gap="16px" align="center">
-          <FormLabel w="180px" m="0" flex="0 0 180px">
-            Buy commission
-          </FormLabel>
-          <Input type="number" name="bcp" textAlign="right" value={input.bcp ?? ""} onChange={handleChangeInput} />
-        </FormControl>
+          <FormControl as={Flex} gap="16px" align="center">
+            <FormLabel w="180px" m="0" flex="0 0 180px">
+              Buy commission
+            </FormLabel>
+            <Input type="number" name="bcp" textAlign="right" value={input.bcp ?? ""} onChange={handleChangeInput} />
+          </FormControl>
 
-        <FormControl as={Flex} gap="16px" align="center">
-          <FormLabel w="180px" m="0" flex="0 0 180px">
-            Selling commission
-          </FormLabel>
-          <Input type="number" name="scp" textAlign="right" value={input.scp ?? ""} onChange={handleChangeInput} />
-        </FormControl>
+          <FormControl as={Flex} gap="16px" align="center">
+            <FormLabel w="180px" m="0" flex="0 0 180px">
+              Selling commission
+            </FormLabel>
+            <Input type="number" name="scp" textAlign="right" value={input.scp ?? ""} onChange={handleChangeInput} />
+          </FormControl>
 
-        <Box mt="24px" textAlign="right">
-          <Button type="submit">Submit</Button>
-        </Box>
-      </VStack>
+          <Box mt="24px" textAlign="right">
+            <Button type="submit">Submit</Button>
+          </Box>
+        </VStack>
 
-      <VStack align="stretch" gap="16px" w="280px">
-        <Flex align="center" justify="space-between" gap="16px" h="40px">
-          <Text w="180px">Buying Commission</Text>
-          <Text>{output?.buyingCommission}</Text>
-        </Flex>
+        <VStack align="stretch" gap="16px" w="280px">
+          <Flex align="center" justify="space-between" gap="16px" h="40px">
+            <Text w="180px">Buying Commission</Text>
+            <Text>{output?.buyingCommission}</Text>
+          </Flex>
 
-        <Flex align="center" justify="space-between" gap="16px" h="40px">
-          <Text w="180px">Selling Commission</Text>
-          <Text>{output?.sellingCommission}</Text>
-        </Flex>
+          <Flex align="center" justify="space-between" gap="16px" h="40px">
+            <Text w="180px">Selling Commission</Text>
+            <Text>{output?.sellingCommission}</Text>
+          </Flex>
 
-        <Flex align="center" justify="space-between" gap="16px" h="40px">
-          <Text w="180px">Total Commission</Text>
-          <Text>{output?.totalCommission}</Text>
-        </Flex>
+          <Flex align="center" justify="space-between" gap="16px" h="40px">
+            <Text w="180px">Total Commission</Text>
+            <Text>{output?.totalCommission}</Text>
+          </Flex>
 
-        <Flex align="center" justify="space-between" gap="16px" h="40px">
-          <Text w="180px">Transaction Tax</Text>
-          <Text>{output?.transactionTax}</Text>
-        </Flex>
+          <Flex align="center" justify="space-between" gap="16px" h="40px">
+            <Text w="180px">Transaction Tax</Text>
+            <Text>{output?.transactionTax}</Text>
+          </Flex>
 
-        <Flex align="center" justify="space-between" gap="16px" h="40px">
-          <Text w="180px">Profit And Loss</Text>
-          <Text>{output?.profitAndLoss}</Text>
-        </Flex>
-      </VStack>
-    </Flex>
+          <Flex align="center" justify="space-between" gap="16px" h="40px">
+            <Text w="180px">Profit And Loss</Text>
+            <Text>{output?.profitAndLoss}</Text>
+          </Flex>
+        </VStack>
+      </Flex>
+    </ContentsLayout>
   );
 };

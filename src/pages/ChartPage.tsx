@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Box, Center, HStack, Icon, IconButton, Tag, Text, VStack } from "@chakra-ui/react";
+import { Center, HStack, Icon, IconButton, Tag, Text } from "@chakra-ui/react";
 import { Bookmark, DollarSign, DownloadCloud } from "react-feather";
+import { ContentsLayout } from "../layouts";
 import { Chart, MarkerDrawer, Select, TradeDrawer } from "../components";
 import { useChartStore, useFavoriteStore, useMarkerStore, useTradeStore } from "../stores";
 
@@ -70,8 +71,8 @@ export const ChartPage = () => {
 
       <MarkerDrawer isOpen={!!symbol && isOpenMarkerDrawer} symbol={symbol} onClose={handleCloseMarkerDrawer} />
 
-      <VStack overflow="auto" gap="24px" align="stretch" w="full" h="full">
-        <HStack>
+      <ContentsLayout
+        left={
           <HStack gap="16px">
             <Tag>{symbol?.ticker ?? "NONE"}</Tag>
 
@@ -84,42 +85,43 @@ export const ChartPage = () => {
               onChange={handleSelectSymbol}
             />
           </HStack>
+        }
+        right={
+          <HStack gap="8px">
+            <IconButton
+              ml="auto"
+              colorScheme="blue"
+              aria-label="sync database"
+              icon={<Icon as={DownloadCloud} />}
+              onClick={handleClickSyncChartData}
+            />
 
-          <IconButton
-            ml="auto"
-            colorScheme="blue"
-            aria-label="sync database"
-            icon={<Icon as={DownloadCloud} />}
-            onClick={handleClickSyncChartData}
-          />
+            <IconButton
+              ml="8px"
+              colorScheme="orange"
+              aria-label="sync database"
+              icon={<Icon as={DollarSign} />}
+              onClick={handleOpenTradeDrawer}
+            />
 
-          <IconButton
-            ml="8px"
-            colorScheme="orange"
-            aria-label="sync database"
-            icon={<Icon as={DollarSign} />}
-            onClick={handleOpenTradeDrawer}
-          />
-
-          <IconButton
-            ml="8px"
-            colorScheme="teal"
-            aria-label="sync database"
-            icon={<Icon as={Bookmark} />}
-            onClick={handleOpenMarkerDrawer}
-          />
-        </HStack>
-
-        <Box flex="1">
-          {isEmpty ? (
-            <Center w="full" h="full">
-              <Text>No Chart Data</Text>
-            </Center>
-          ) : (
-            <Chart chartValues={chartValues} trades={trades} markers={markers} />
-          )}
-        </Box>
-      </VStack>
+            <IconButton
+              ml="8px"
+              colorScheme="teal"
+              aria-label="sync database"
+              icon={<Icon as={Bookmark} />}
+              onClick={handleOpenMarkerDrawer}
+            />
+          </HStack>
+        }
+      >
+        {isEmpty ? (
+          <Center w="full" h="full">
+            <Text>No Chart Data</Text>
+          </Center>
+        ) : (
+          <Chart chartValues={chartValues} trades={trades} markers={markers} />
+        )}
+      </ContentsLayout>
     </>
   );
 };

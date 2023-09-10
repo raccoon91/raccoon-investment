@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, MouseEventHandler } from "react";
-import { HStack, Icon, IconButton, VStack } from "@chakra-ui/react";
+import { Icon, IconButton } from "@chakra-ui/react";
 import { DownloadCloud } from "react-feather";
+import { ContentsLayout } from "../layouts";
 import { SearchInput, SymbolList } from "../components";
 import { useFavoriteStore, useSymbolStore } from "../stores";
 
@@ -46,8 +47,8 @@ export const SymbolPage = () => {
   };
 
   return (
-    <VStack align="stretch" gap="24px" w="full" h="full">
-      <HStack justify="space-between">
+    <ContentsLayout
+      left={
         <SearchInput
           column={column}
           search={search}
@@ -55,16 +56,17 @@ export const SymbolPage = () => {
           onChangeSearch={handleChangeSearch}
           onSubmit={handleSearchSearch}
         />
-
+      }
+      right={
         <IconButton
           aria-label="sync database"
           colorScheme="blue"
           icon={<Icon as={DownloadCloud} />}
           onClick={syncSymbolData}
         />
-      </HStack>
-
+      }
+    >
       <SymbolList symbolList={symbolList} favoriteMap={favoriteMap} onClickFavorite={handleClickFavorite} />
-    </VStack>
+    </ContentsLayout>
   );
 };

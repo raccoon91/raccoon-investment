@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { HStack, Icon, IconButton, VStack } from "@chakra-ui/react";
+import { Icon, IconButton } from "@chakra-ui/react";
 import { Save } from "react-feather";
+import { ContentsLayout } from "../layouts";
 import { GroupList } from "../components";
 import { useFavoriteStore } from "../stores";
 
@@ -31,12 +32,10 @@ export const HomePage = () => {
   };
 
   return (
-    <VStack align="stretch" gap="24px" w="full" h="full">
-      <HStack justify="flex-end">
-        <IconButton aria-label="sync database" icon={<Icon as={Save} />} onClick={handleSaveGroupList} />
-      </HStack>
-
+    <ContentsLayout
+      right={<IconButton aria-label="sync database" icon={<Icon as={Save} />} onClick={handleSaveGroupList} />}
+    >
       <GroupList groupList={copyGroupList} onChageGroupList={handleChangeFavoriteList} />
-    </VStack>
+    </ContentsLayout>
   );
 };
