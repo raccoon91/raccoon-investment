@@ -63,7 +63,7 @@ export const TradePage = () => {
           size="sm"
           variant="outline"
           colorScheme="gray"
-          value={symbol?.id ?? params.get("symbolId") ?? ""}
+          value={symbol?.id ?? params.get("symbolId") ?? "all"}
           options={[
             { value: "all", label: "ALL" },
             ...favoriteList.map(favorite => ({
