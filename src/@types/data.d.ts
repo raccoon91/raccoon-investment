@@ -26,6 +26,32 @@ type IGroupData = {
   favorites?: IFavoriteData[] | null;
 };
 
+type IMarkerPosition = "aboveBar" | "belowBar" | "inBar";
+type IMarkerShape = "circle" | "arrowDown" | "square" | "arrowUp";
+
+type ITradeData = {
+  symbol_id: number;
+  date: string;
+  type: string;
+  price: number;
+  count: number;
+  commission: number;
+  text: string;
+};
+
+type IDividenData = {
+  symbol_id: number;
+  date: string;
+  text: string;
+};
+
+type IChartMarkerData = {
+  time: string;
+  position: IMarkerPosition;
+  color: string;
+  shape: IMarkerShape;
+};
+
 type ICandleChartData = {
   symbol_id: number;
   time: string;
@@ -33,24 +59,4 @@ type ICandleChartData = {
   high: number;
   low: number;
   close: number;
-};
-
-type ITradeData = {
-  symbol_id: number;
-  time: string;
-  type: "buy" | "sell";
-  price: number;
-  count: number;
-  commission: number;
-  position: "aboveBar" | "belowBar" | "inBar";
-  shape: "circle" | "arrowDown" | "square" | "arrowUp";
-  text: string;
-};
-
-type IMarkerData = {
-  symbol_id: number;
-  time: string;
-  position: "aboveBar" | "belowBar" | "inBar";
-  shape: "circle" | "arrowDown" | "square" | "arrowUp";
-  text: string;
 };

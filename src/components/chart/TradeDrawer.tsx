@@ -59,9 +59,8 @@ export const TradeDrawer: FC<ITradeDrawerProps> = ({ isOpen, symbol, onClose }) 
 
     setType(tradeType);
     setNewTrade({
-      id: trades.length,
       symbol_id: symbol.id,
-      time: dayjs().format("YYYY-MM-DD"),
+      date: dayjs().format("YYYY-MM-DD"),
       type: tradeType,
       price: 0,
       count: 0,
@@ -79,7 +78,7 @@ export const TradeDrawer: FC<ITradeDrawerProps> = ({ isOpen, symbol, onClose }) 
   const handleChangeTradeDate = (date: Date | null) => {
     if (!date) return;
 
-    setNewTrade(p => ({ ...(p ?? {}), time: dayjs(date).format("YYYY-MM-DD") }));
+    setNewTrade(p => ({ ...(p ?? {}), date: dayjs(date).format("YYYY-MM-DD") }));
   };
 
   const handleSaveTrade = async () => {
@@ -141,7 +140,7 @@ export const TradeDrawer: FC<ITradeDrawerProps> = ({ isOpen, symbol, onClose }) 
                   <Tbody>
                     {trades.map((trade, index) => (
                       <Tr key={index}>
-                        <Td>{trade.time}</Td>
+                        <Td>{trade.date}</Td>
                         <Td>{trade.type}</Td>
                         <Td>{trade.count}</Td>
                         <Td>{trade.price}</Td>
@@ -193,7 +192,7 @@ export const TradeDrawer: FC<ITradeDrawerProps> = ({ isOpen, symbol, onClose }) 
                       <Datepicker
                         w="full"
                         textAlign="right"
-                        value={newTrade?.time?.toString() ?? ""}
+                        value={newTrade?.date ?? ""}
                         onChange={handleChangeTradeDate}
                       />
                     </Box>

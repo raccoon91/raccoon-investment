@@ -7,16 +7,16 @@ import { useChartTheme } from "../../styles";
 interface IChartProps {
   chartValues?: ICandleChartData[] | null;
   trades?: ITradeData[];
-  markers?: IMarkerData[];
+  dividens?: IDividenData[];
 }
 
-export const Chart: FC<IChartProps> = ({ chartValues, trades, markers }) => {
+export const Chart: FC<IChartProps> = ({ chartValues, trades, dividens }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<IChartApi | null>(null);
   const chartTheme = useChartTheme();
 
   useEffect(() => {
-    if (!chartRef.current || !chartValues || !markers) return;
+    if (!chartRef.current || !chartValues || !dividens) return;
 
     const handleChartClick = (event: MouseEventParams) => {
       console.log(event);
@@ -45,14 +45,26 @@ export const Chart: FC<IChartProps> = ({ chartValues, trades, markers }) => {
 
     const allMarkers = sortBy(
       [
-        ...(markers ?? []).map(marker => ({
-          ...marker,
-          color: chartTheme.greenMarker,
-        })),
-        ...(trades ?? []).map(trade => ({
-          ...trade,
-          color: trade.type === "buy" ? chartTheme.blueMarker : chartTheme.redMarker,
-        })),
+        ...(dividens ?? []).map(
+          dividen =>
+            ({
+              ...dividen,
+              time: dividen.date,
+              position: "aboveBar",
+              shape: "circle",
+              color: chartTheme.greenMarker,
+            }) as IChartMarkerData
+        ),
+        ...(trades ?? []).map(
+          trade =>
+            ({
+              time: trade.date,
+              position: "aboveBar",
+              shape: "arrowDown",
+              text: trade.text,
+              color: trade.type === "buy" ? chartTheme.blueMarker : chartTheme.redMarker,
+            }) as IChartMarkerData
+        ),
       ],
       "time"
     );
@@ -66,7 +78,7 @@ export const Chart: FC<IChartProps> = ({ chartValues, trades, markers }) => {
       chartInstance.current?.unsubscribeClick(handleChartClick);
       chartInstance.current?.remove();
     };
-  }, [chartRef, chartInstance, chartTheme, chartValues, trades, markers]);
+  }, [chartRef, chartInstance, chartTheme, chartValues, trades, dividens]);
 
   return <Box ref={chartRef} w="full" h="full" />;
 };

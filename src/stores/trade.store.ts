@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { sortBy } from "lodash-es";
-import { db } from "../db";
+import { useUserStore } from "./user.store";
+import { supabase } from "../db";
 
 interface ITradeStore {
   trades: ITradeData[];
@@ -15,8 +16,9 @@ export const useTradeStore = create<ITradeStore>(set => ({
     try {
       if (symbolId === undefined) return;
 
-      const tradeData = await db.trades.where({ symbol_id: symbolId }).toArray();
-      const sortedTradeData = sortBy(tradeData, "time");
+      const { data } = await supabase.from("trades").select("*").eq("symbol_id", symbolId);
+
+      const sortedTradeData = sortBy(data ?? [], "date");
 
       set({ trades: sortedTradeData });
     } catch (err) {
@@ -25,21 +27,24 @@ export const useTradeStore = create<ITradeStore>(set => ({
   },
   getAllTradeData: async () => {
     try {
-      const tradeData = await db.trades.toArray();
-      const sortedTradeData = sortBy(tradeData, "time");
+      const { data } = await supabase.from("trades").select("*");
+      const sortedTradeData = sortBy(data ?? [], "date");
 
       set({ trades: sortedTradeData });
     } catch (err) {
       console.error(err);
     }
   },
-  saveTradeData: async (trade: Omit<ITradeData, "position" | "shape">) => {
+  saveTradeData: async (trade: ITradeData) => {
     try {
-      await db.trades.put({
-        ...trade,
-        position: "aboveBar",
-        shape: "arrowDown",
-      });
+      const user = useUserStore.getState().user;
+
+      if (!user) return;
+
+      await supabase
+        .from("trades")
+        .upsert({ ...trade, user_id: user.id })
+        .select();
     } catch (err) {
       console.error(err);
     }

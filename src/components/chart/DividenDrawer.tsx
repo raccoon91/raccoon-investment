@@ -24,66 +24,65 @@ import {
 } from "@chakra-ui/react";
 import { Plus, Save } from "react-feather";
 import { Datepicker } from "../Datepicker";
-import { useMarkerStore } from "../../stores";
+import { useDividenStore } from "../../stores";
 
-interface IMarkerDrawerProps {
+interface IDividenDrawerProps {
   isOpen: boolean;
   symbol?: ISymbolData | null;
   onClose: () => void;
 }
 
-export const MarkerDrawer: FC<IMarkerDrawerProps> = ({ isOpen, symbol, onClose }) => {
+export const DividenDrawer: FC<IDividenDrawerProps> = ({ isOpen, symbol, onClose }) => {
   const [isCreate, setIsCreate] = useState(false);
-  const [newMarker, setNewMarker] = useState<Record<string, any> | null>(null);
-  const { markers, getMarkerData, saveMarkerData } = useMarkerStore(state => ({
-    markers: state.markers,
-    getMarkerData: state.getMarkerData,
-    saveMarkerData: state.saveMarkerData,
+  const [newDividen, setNewDividen] = useState<Record<string, any> | null>(null);
+  const { dividens, getDividenData, saveDividenData } = useDividenStore(state => ({
+    dividens: state.dividens,
+    getDividenData: state.getDividenData,
+    saveDividenData: state.saveDividenData,
   }));
 
   useEffect(() => {
     if (symbol?.id === undefined) return;
 
-    getMarkerData(symbol?.id);
+    getDividenData(symbol?.id);
   }, [symbol]);
 
-  const handleCloseCreateMarker = () => {
+  const handleCloseCreateDividen = () => {
     setIsCreate(false);
-    setNewMarker(null);
+    setNewDividen(null);
   };
 
-  const handleCreateMarker = () => {
+  const handleCreateDividen = () => {
     if (symbol?.id === undefined) return;
 
     setIsCreate(true);
-    setNewMarker({
-      id: markers.length,
+    setNewDividen({
       symbol_id: symbol.id,
-      time: dayjs().format("YYYY-MM-DD"),
+      date: dayjs().format("YYYY-MM-DD"),
       text: "dividen",
     });
   };
 
-  const handleChangeMarker = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeDividen = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setNewMarker(p => ({ ...p, [name]: value }));
+    setNewDividen(p => ({ ...p, [name]: value }));
   };
 
-  const handleChangeMarkerDate = (date: Date | null) => {
+  const handleChangeDividenDate = (date: Date | null) => {
     if (!date) return;
 
-    setNewMarker(p => ({ ...(p ?? {}), time: dayjs(date).format("YYYY-MM-DD") }));
+    setNewDividen(p => ({ ...(p ?? {}), date: dayjs(date).format("YYYY-MM-DD") }));
   };
 
-  const handleSaveMarker = async () => {
-    if (symbol?.id === undefined || !newMarker) return;
+  const handleSaveDividen = async () => {
+    if (symbol?.id === undefined || !newDividen) return;
 
-    await saveMarkerData(newMarker as Omit<IMarkerData, "position" | "shape">);
-    await getMarkerData(symbol?.id);
+    await saveDividenData(newDividen as Omit<IDividenData, "position" | "shape">);
+    await getDividenData(symbol?.id);
 
     setIsCreate(false);
-    setNewMarker(null);
+    setNewDividen(null);
   };
 
   return (
@@ -97,14 +96,14 @@ export const MarkerDrawer: FC<IMarkerDrawerProps> = ({ isOpen, symbol, onClose }
           <Flex direction="column" gap="16px">
             <HStack justify="space-between">
               <Heading as="h5" fontSize="16px">
-                Marker
+                Dividen
               </Heading>
 
               <IconButton
                 variant="ghost"
                 aria-label="create dividen"
                 icon={<Icon as={Plus} />}
-                onClick={handleCreateMarker}
+                onClick={handleCreateDividen}
               />
             </HStack>
 
@@ -118,10 +117,10 @@ export const MarkerDrawer: FC<IMarkerDrawerProps> = ({ isOpen, symbol, onClose }
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {markers.map((marker, index) => (
+                    {dividens.map((dividen, index) => (
                       <Tr key={index}>
-                        <Td>{marker.time}</Td>
-                        <Td>{marker.text}</Td>
+                        <Td>{dividen.date}</Td>
+                        <Td>{dividen.text}</Td>
                       </Tr>
                     ))}
                   </Tbody>
@@ -136,8 +135,8 @@ export const MarkerDrawer: FC<IMarkerDrawerProps> = ({ isOpen, symbol, onClose }
                       <Datepicker
                         w="full"
                         textAlign="right"
-                        value={newMarker?.time?.toString() ?? ""}
-                        onChange={handleChangeMarkerDate}
+                        value={newDividen?.date ?? ""}
+                        onChange={handleChangeDividenDate}
                       />
                     </Box>
                   </Flex>
@@ -147,21 +146,21 @@ export const MarkerDrawer: FC<IMarkerDrawerProps> = ({ isOpen, symbol, onClose }
                       w="200px"
                       textAlign="right"
                       name="text"
-                      value={newMarker?.text}
-                      onChange={handleChangeMarker}
+                      value={newDividen?.text}
+                      onChange={handleChangeDividen}
                     />
                   </Flex>
                 </Flex>
 
                 <Flex justify="flex-end" gap="32px" mt="48px">
-                  <Button variant="ghost" colorScheme="red" onClick={handleCloseCreateMarker}>
+                  <Button variant="ghost" colorScheme="red" onClick={handleCloseCreateDividen}>
                     Cancel
                   </Button>
                   <IconButton
                     aria-label="save dividen"
                     variant="ghost"
                     icon={<Icon as={Save} />}
-                    onClick={handleSaveMarker}
+                    onClick={handleSaveDividen}
                   />
                 </Flex>
               </Flex>

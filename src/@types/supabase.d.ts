@@ -3,6 +3,43 @@ type Json = string | number | boolean | null | { [key: string]: Json | undefined
 interface Supabase {
   public: {
     Tables: {
+      dividens: {
+        Row: {
+          date: string;
+          id: number;
+          symbol_id: number;
+          text: string;
+          user_id: string;
+        };
+        Insert: {
+          date: string;
+          id?: number;
+          symbol_id: number;
+          text: string;
+          user_id: string;
+        };
+        Update: {
+          date?: string;
+          id?: number;
+          symbol_id?: number;
+          text?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "dividens_symbol_id_fkey";
+            columns: ["symbol_id"];
+            referencedRelation: "symbols";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "dividens_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       favorites: {
         Row: {
           group_id: number | null;
@@ -106,6 +143,55 @@ interface Supabase {
           type?: string;
         };
         Relationships: [];
+      };
+      trades: {
+        Row: {
+          commission: number;
+          count: number;
+          date: string;
+          id: number;
+          price: number;
+          symbol_id: number;
+          text: string;
+          type: string;
+          user_id: string;
+        };
+        Insert: {
+          commission: number;
+          count: number;
+          date: string;
+          id?: number;
+          price: number;
+          symbol_id: number;
+          text: string;
+          type: string;
+          user_id: string;
+        };
+        Update: {
+          commission?: number;
+          count?: number;
+          date?: string;
+          id?: number;
+          price?: number;
+          symbol_id?: number;
+          text?: string;
+          type?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "trades_symbol_id_fkey";
+            columns: ["symbol_id"];
+            referencedRelation: "symbols";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "trades_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: {

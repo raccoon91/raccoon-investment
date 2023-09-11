@@ -3,8 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Center, HStack, Icon, IconButton, Tag, Text } from "@chakra-ui/react";
 import { Bookmark, DollarSign, DownloadCloud } from "react-feather";
 import { ContentsLayout } from "../layouts";
-import { Chart, MarkerDrawer, Select, TradeDrawer } from "../components";
-import { useChartStore, useFavoriteStore, useMarkerStore, useTradeStore } from "../stores";
+import { Chart, DividenDrawer, Select, TradeDrawer } from "../components";
+import { useChartStore, useFavoriteStore, useDividenStore, useTradeStore } from "../stores";
 
 export const ChartPage = () => {
   const navigate = useNavigate();
@@ -21,9 +21,9 @@ export const ChartPage = () => {
     clearChartData: state.clearChartData,
   }));
   const trades = useTradeStore(state => state.trades);
-  const markers = useMarkerStore(state => state.markers);
+  const dividens = useDividenStore(state => state.dividens);
   const [isOpenTradeDrawer, setIsOpenTradeDrawer] = useState(false);
-  const [isOpenMarkerDrawer, setIsOpenMarkerDrawer] = useState(false);
+  const [isOpenDividenDrawer, setIsOpenDividenDrawer] = useState(false);
 
   const isEmpty = useMemo(() => !!chartValues && chartValues.length === 0, [chartValues]);
 
@@ -53,12 +53,12 @@ export const ChartPage = () => {
     setIsOpenTradeDrawer(false);
   };
 
-  const handleOpenMarkerDrawer = () => {
-    setIsOpenMarkerDrawer(true);
+  const handleOpenDividenDrawer = () => {
+    setIsOpenDividenDrawer(true);
   };
 
-  const handleCloseMarkerDrawer = () => {
-    setIsOpenMarkerDrawer(false);
+  const handleCloseDividenDrawer = () => {
+    setIsOpenDividenDrawer(false);
   };
 
   const handleSelectSymbol = (symbolId?: number) => {
@@ -69,7 +69,7 @@ export const ChartPage = () => {
     <>
       <TradeDrawer isOpen={!!symbol && isOpenTradeDrawer} symbol={symbol} onClose={handleCloseTradeDrawer} />
 
-      <MarkerDrawer isOpen={!!symbol && isOpenMarkerDrawer} symbol={symbol} onClose={handleCloseMarkerDrawer} />
+      <DividenDrawer isOpen={!!symbol && isOpenDividenDrawer} symbol={symbol} onClose={handleCloseDividenDrawer} />
 
       <ContentsLayout
         left={
@@ -109,7 +109,7 @@ export const ChartPage = () => {
               colorScheme="teal"
               aria-label="sync database"
               icon={<Icon as={Bookmark} />}
-              onClick={handleOpenMarkerDrawer}
+              onClick={handleOpenDividenDrawer}
             />
           </HStack>
         }
@@ -119,7 +119,7 @@ export const ChartPage = () => {
             <Text>No Chart Data</Text>
           </Center>
         ) : (
-          <Chart chartValues={chartValues} trades={trades} markers={markers} />
+          <Chart chartValues={chartValues} trades={trades} dividens={dividens} />
         )}
       </ContentsLayout>
     </>

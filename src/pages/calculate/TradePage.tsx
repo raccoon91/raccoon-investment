@@ -4,7 +4,7 @@ import { Table, TableContainer, Tbody, Td, Thead, Tr } from "@chakra-ui/react";
 import { ContentsLayout } from "../../layouts";
 import { Select } from "../../components";
 import { useFavoriteStore, useSymbolStore, useTradeStore } from "../../stores";
-import { CalculateBuyPrice, CalculateSellPrice, calculateBuyPrice, calculateSellPrice } from "../../utils";
+import { CalculateTrade, calculateTrade } from "../../utils";
 
 export const TradePage = () => {
   const navigate = useNavigate();
@@ -22,12 +22,7 @@ export const TradePage = () => {
     getTradeData: state.getTradeData,
     getAllTradeData: state.getAllTradeData,
   }));
-  const [outputs, setOutputs] = useState<
-    (
-      | ({ type: "buy"; date: string } & Partial<ReturnType<CalculateBuyPrice>>)
-      | ({ type: "sell"; date: string } & Partial<ReturnType<CalculateSellPrice>>)
-    )[]
-  >([]);
+  const [outputs, setOutputs] = useState<({ type: string; date: string } & Partial<ReturnType<CalculateTrade>>)[]>([]);
 
   useEffect(() => {
     getFavoriteList();
@@ -42,27 +37,18 @@ export const TradePage = () => {
 
   useEffect(() => {
     setOutputs(
-      trades?.map(trade =>
-        trade.type === "buy"
-          ? {
-              type: trade.type,
-              date: trade.time,
-              ...calculateBuyPrice({
-                bp: trade.price,
-                nos: trade.count,
-                bcp: trade.commission,
-              }),
-            }
-          : {
-              type: trade.type,
-              date: trade.time,
-              ...calculateSellPrice({
-                sp: trade.price,
-                nos: trade.count,
-                scp: trade.commission,
-              }),
-            }
-      ) ?? []
+      trades?.map(trade => ({
+        type: trade.type,
+        date: trade.date,
+        ...calculateTrade({
+          type: trade.type,
+          bp: trade.type === "buy" ? trade.price : null,
+          sp: trade.type === "buy" ? null : trade.price,
+          nos: trade.count,
+          bcp: trade.type === "buy" ? trade.commission : null,
+          scp: trade.type === "buy" ? null : trade.commission,
+        }),
+      })) ?? []
     );
   }, [trades]);
 
@@ -105,33 +91,19 @@ export const TradePage = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {outputs.map((output, index) =>
-              output.type === "buy" ? (
-                <Tr key={index}>
-                  <Td>{output.type.toUpperCase()}</Td>
-                  <Td>{output.price}</Td>
-                  <Td>{output.date}</Td>
-                  <Td>{output.buyingCommission}</Td>
-                  <Td>-</Td>
-                  <Td>-</Td>
-                  <Td>-</Td>
-                  <Td>-</Td>
-                  <Td>{output.price}</Td>
-                </Tr>
-              ) : (
-                <Tr key={index}>
-                  <Td>{output.type.toUpperCase()}</Td>
-                  <Td>{output.price}</Td>
-                  <Td>{output.date}</Td>
-                  <Td>-</Td>
-                  <Td>{output.sellingCommission}</Td>
-                  <Td>{output.TAFTax}</Td>
-                  <Td>{output.SECTax}</Td>
-                  <Td>{output.transactionTax}</Td>
-                  <Td>{output.calculatePrice}</Td>
-                </Tr>
-              )
-            )}
+            {outputs.map((output, index) => (
+              <Tr key={index}>
+                <Td>{output.type.toUpperCase()}</Td>
+                <Td>{output.price}</Td>
+                <Td>{output.date}</Td>
+                <Td>{output?.buyingCommission ?? "-"}</Td>
+                <Td>{output?.sellingCommission ?? "-"}</Td>
+                <Td>{output?.TAFTax ?? "-"}</Td>
+                <Td>{output?.SECTax ?? "-"}</Td>
+                <Td>{output?.transactionTax ?? "-"}</Td>
+                <Td>{output.price}</Td>
+              </Tr>
+            ))}
           </Tbody>
         </Table>
       </TableContainer>
