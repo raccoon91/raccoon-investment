@@ -11,7 +11,7 @@ export const MultiPageLayout: FC<PropsWithChildren<IMultiPageLayoutProps>> = ({ 
     <Flex w="full" h="full">
       {sidebar && sidebar}
 
-      <Box w="calc(100% - 201px)" h="full">
+      <Box w="calc(100% - 241px)" h="full">
         <Outlet />
       </Box>
     </Flex>

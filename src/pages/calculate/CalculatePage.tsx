@@ -6,5 +6,5 @@ const menuList = [
 ];
 
 export const CalculatePage = () => {
-  return <MultiPageLayout sidebar={<MultiPageSidebar menus={menuList} />} />;
+  return <MultiPageLayout sidebar={<MultiPageSidebar title="Calculate" menus={menuList} />} />;
 };

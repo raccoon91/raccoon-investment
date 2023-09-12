@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Box, Button, Flex, FormControl, FormLabel, Input, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Input, Text, VStack, Wrap } from "@chakra-ui/react";
 import { ContentsLayout } from "../../layouts";
 import { calculateProfitAndLoss } from "../../utils";
 
@@ -36,7 +36,7 @@ export const ProfitAndLossPage = () => {
 
   return (
     <ContentsLayout>
-      <Flex gap="60px">
+      <Wrap spacing="60px">
         <VStack as="form" align="stretch" gap="16px" w="400px" onSubmit={handleSubmit}>
           <FormControl as={Flex} gap="16px" align="center">
             <FormLabel w="180px" m="0" flex="0 0 180px">
@@ -111,7 +111,7 @@ export const ProfitAndLossPage = () => {
             <Text>{output?.profitAndLoss}</Text>
           </Flex>
         </VStack>
-      </Flex>
+      </Wrap>
     </ContentsLayout>
   );
 };
