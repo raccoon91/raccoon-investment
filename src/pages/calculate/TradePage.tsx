@@ -27,7 +27,7 @@ export const TradePage = () => {
   useEffect(() => {
     getFavoriteList();
 
-    if (!params.get("symbolId") || params.get("symbolId") === "all") {
+    if (!params.has("symbolId") || params.get("symbolId") === "all") {
       getAllTradeData();
     } else {
       getSymbolData(params.get("symbolId"));

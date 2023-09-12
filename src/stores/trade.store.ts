@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { sortBy } from "lodash-es";
+import { isNil, sortBy } from "lodash-es";
 import { useUserStore } from "./user.store";
 import { supabase } from "../db";
 
@@ -14,7 +14,7 @@ export const useTradeStore = create<ITradeStore>(set => ({
   trades: [],
   getTradeData: async (symbolId?: number) => {
     try {
-      if (symbolId === undefined) return;
+      if (isNil(symbolId)) return;
 
       const { data } = await supabase.from("trades").select("*").eq("symbol_id", symbolId);
 

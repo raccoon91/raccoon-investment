@@ -1,21 +1,19 @@
 import { create } from "zustand";
-import { sortBy } from "lodash-es";
+import { isNil, sortBy } from "lodash-es";
 import { useUserStore } from "./user.store";
 import { supabase } from "../db";
 
 interface IDividenStore {
   dividens: IDividenData[];
-  getDividenData: (symbolId?: number) => Promise<void>;
+  getDividenData: (symbolId?: string | null) => Promise<void>;
   saveDividenData: (dividen: Omit<IDividenData, "position" | "shape">) => Promise<void>;
 }
 
 export const useDividenStore = create<IDividenStore>(set => ({
   dividens: [],
-  getDividenData: async (symbolId?: number) => {
+  getDividenData: async (symbolId?: string | null) => {
     try {
-      if (symbolId === undefined) return;
-
-      // const dividenData = await db.dividens.where({ symbol_id: symbolId }).toArray();
+      if (isNil(symbolId)) return;
 
       const { data } = await supabase.from("dividens").select("*").eq("symbol_id", symbolId);
 

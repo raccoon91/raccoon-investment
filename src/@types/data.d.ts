@@ -30,6 +30,7 @@ type IMarkerPosition = "aboveBar" | "belowBar" | "inBar";
 type IMarkerShape = "circle" | "arrowDown" | "square" | "arrowUp";
 
 type ITradeData = {
+  id: number;
   symbol_id: number;
   date: string;
   type: string;
@@ -40,6 +41,7 @@ type ITradeData = {
 };
 
 type IDividenData = {
+  id: number;
   symbol_id: number;
   date: string;
   text: string;
