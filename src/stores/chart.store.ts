@@ -2,7 +2,7 @@ import axios from "axios";
 import { create } from "zustand";
 import { sortBy, uniqBy } from "lodash-es";
 import { useGlobalStore } from "./global.store";
-import { db, supabase } from "../db";
+import { dexie, supabase } from "../db";
 
 type IChartInterval = "1min" | "5min" | "15min" | "30min" | "45min" | "1h" | "2h" | "4h" | "1day" | "1week" | "1month";
 
@@ -25,7 +25,8 @@ export const useChartStore = create<IChartStore>(set => ({
 
       const { data: symbol } = await supabase.from("symbols").select("*").eq("id", symbolId).maybeSingle();
 
-      const chartValues = await db.charts.where({ symbol_id: symbolId }).toArray();
+      const chartValues = await dexie.charts.where({ symbol_id: Number(symbolId) }).toArray();
+
       const sortedChartValues = sortBy(chartValues, "time");
 
       set({ symbol, chartValues: sortedChartValues });
@@ -64,7 +65,7 @@ export const useChartStore = create<IChartStore>(set => ({
           close: Number(data.close),
         }));
 
-        await db.charts.bulkPut(chartValues);
+        await dexie.charts.bulkPut(chartValues);
 
         const sortedChartValues = sortBy(chartValues, "time");
 

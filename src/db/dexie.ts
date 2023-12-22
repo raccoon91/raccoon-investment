@@ -7,9 +7,9 @@ export class Dexie extends DexieBase {
     super("raccoon-investment");
 
     this.version(1).stores({
-      charts: "[symbol_id+date]",
+      charts: "[symbol_id+time]",
     });
   }
 }
 
-export const db = new Dexie();
+export const dexie = new Dexie();
